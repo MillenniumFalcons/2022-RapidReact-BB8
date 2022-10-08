@@ -42,27 +42,27 @@ public class SwerveDriveNoAim extends CommandBase {
 
     // Called when the command is initially scheduled.
     @Override
-    public void initialize() {
-    }
+    public void initialize() {}
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
         double xComponent = ySpeedFunction.getAsDouble() * translateMultiplier;
         double yComponent = -xSpeedFunction.getAsDouble() * translateMultiplier;
-        translation = new Translation2d(xComponent, yComponent)
-                .times(SwerveDriveConstants.kDrivePossibleMaxSpeedMPS);
-        rotation = -turnSpeedFunction.getAsDouble()
-                * SwerveDriveConstants.kRotPossibleMaxSpeedRadPerSec
-                * rotationMultiplier;
+        translation =
+                new Translation2d(xComponent, yComponent)
+                        .times(SwerveDriveConstants.kDrivePossibleMaxSpeedMPS);
+        rotation =
+                -turnSpeedFunction.getAsDouble()
+                        * SwerveDriveConstants.kRotPossibleMaxSpeedRadPerSec
+                        * rotationMultiplier;
 
         swerve.drive(translation, rotation, getIsFieldOriented.getAsBoolean(), false);
     }
 
     // Called once the command ends or is interrupted.
     @Override
-    public void end(boolean interrupted) {
-    }
+    public void end(boolean interrupted) {}
 
     // Returns true when the command should end.
     @Override

@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.PeriodicSubsystem;
 
 public class WristIntake implements PeriodicSubsystem {
@@ -30,6 +31,7 @@ public class WristIntake implements PeriodicSubsystem {
     private final double nominalVoltage;
 
     private final double intakableDeg;
+    private final double zeroDeg;
 
     public WristIntake(
             TalonFX deployMotor,
@@ -42,7 +44,8 @@ public class WristIntake implements PeriodicSubsystem {
             double deployPositionConversion,
             double nominalVoltage,
             double maxDeployVel,
-            double intakableDeg) {
+            double intakableDeg,
+            double zeroDeg) {
         // pid configured in constants for both
         this.deployMotor = deployMotor;
         this.intakeMotor = intakeMotor;
@@ -58,6 +61,7 @@ public class WristIntake implements PeriodicSubsystem {
         this.deployVelocityConversion = deployVelocityConversion;
         this.deployPositionConversion = deployPositionConversion;
         this.intakableDeg = intakableDeg;
+        this.zeroDeg = zeroDeg;
         this.kDt = kDt;
         this.nominalVoltage = nominalVoltage;
     }
@@ -101,6 +105,8 @@ public class WristIntake implements PeriodicSubsystem {
                 periodicIO.deployDemand,
                 DemandType.ArbitraryFeedForward,
                 periodicIO.deployff / nominalVoltage);
+
+        SmartDashboard.putNumber("Wrist Deg", periodicIO.deployDeg);
     }
 
     @Override
@@ -109,15 +115,18 @@ public class WristIntake implements PeriodicSubsystem {
         writePeriodicOutputs();
     }
 
+    public void extend(double deg) {
+        setDegMotionMagic(deg, degff.calculate(Units.degreesToRadians(intakableDeg), maxDeployVel));
+    }
+
     public void extend() {
         // check sign
-        setDegMotionMagic(
-                intakableDeg, degff.calculate(Units.degreesToRadians(intakableDeg), maxDeployVel));
+        extend(this.intakableDeg);
     }
 
     public void retract() {
-        double zeroDeg = 10;
-        setDegMotionMagic(zeroDeg, degff.calculate(Units.degreesToRadians(zeroDeg), maxDeployVel));
+        setDegMotionMagic(
+                this.zeroDeg, degff.calculate(Units.degreesToRadians(zeroDeg), maxDeployVel));
     }
 
     // vel in m/s surface vel
@@ -128,7 +137,7 @@ public class WristIntake implements PeriodicSubsystem {
     }
 
     // position in deg, ff in volts
-    private void setDegMotionMagic(double position, double feedforward) {
+    public void setDegMotionMagic(double position, double feedforward) {
         periodicIO.deployControlMode = ControlMode.MotionMagic;
         periodicIO.deployff = feedforward;
         // convert to set to native

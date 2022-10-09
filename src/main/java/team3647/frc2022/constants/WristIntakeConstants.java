@@ -19,6 +19,7 @@ public class WristIntakeConstants {
     public static final TalonFXConfiguration kDeployMotorConfig = new TalonFXConfiguration();
 
     public static final double intakableDegree = 132.3;
+    public static final double zeroDeg = 0.0;
     public static final double maxDeployVelocityDegPerSec = 40;
 
     public static final double kIntakeS = 0.75412;

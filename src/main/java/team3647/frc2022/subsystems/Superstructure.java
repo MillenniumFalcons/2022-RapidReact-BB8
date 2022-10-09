@@ -2,6 +2,7 @@ package team3647.frc2022.subsystems;
 
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.util.Units;
+import team3647.frc2022.commands.IntakeCommands;
 import team3647.lib.tracking.FlightDeck;
 import team3647.lib.vision.AimingParameters;
 
@@ -12,9 +13,14 @@ public class Superstructure {
     private double angleToTarget = 0;
     private double turretVelFF = 0.0;
     private final FlightDeck deck;
+    private final WristIntake m_intake;
 
-    public Superstructure(FlightDeck deck) {
+    public final IntakeCommands intakeCommands;
+
+    public Superstructure(FlightDeck deck, WristIntake m_intake) {
         this.deck = deck;
+        this.m_intake = m_intake;
+        intakeCommands = new IntakeCommands(m_intake);
     }
 
     public void periodic(double timestamp) {

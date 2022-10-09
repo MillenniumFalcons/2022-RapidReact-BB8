@@ -41,8 +41,13 @@ public final class GlobalConstants {
     }
 
     public static final class IntakeIds {
-        public static final int kIntakeMotorId = 5;
-        public static final int kDeployMotorId = 15;
+        public static final int kIntakeMotorId = 10;
+        public static final int kDeployMotorId = 11;
+    }
+
+    public static final class ColumnIds {
+        public static final int kMasterMotorId = 0;
+        public static final int kTopSensorPin = 0;
     }
 
     public static final class TurretIds {

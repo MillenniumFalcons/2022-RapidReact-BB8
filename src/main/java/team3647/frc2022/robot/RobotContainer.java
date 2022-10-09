@@ -12,10 +12,13 @@ import java.util.List;
 import team3647.frc2022.autonomous.AutoCommands;
 import team3647.frc2022.autonomous.PathPlannerTrajectories;
 import team3647.frc2022.commands.SwerveDriveNoAim;
+import team3647.frc2022.constants.GlobalConstants;
 import team3647.frc2022.constants.SwerveDriveConstants;
 import team3647.frc2022.constants.VisionConstants;
+import team3647.frc2022.constants.WristIntakeConstants;
 import team3647.frc2022.subsystems.Superstructure;
 import team3647.frc2022.subsystems.SwerveDrive;
+import team3647.frc2022.subsystems.WristIntake;
 import team3647.frc2022.subsystems.vision.VisionController;
 import team3647.lib.GroupPrinter;
 import team3647.lib.inputs.Joysticks;
@@ -65,6 +68,7 @@ public class RobotContainer {
                         () -> true));
 
         configureButtonBindings();
+        configureSmartDashboardLogging();
         SmartDashboard.putNumber("Swerve Angle", 0.0);
         m_swerve.setOdometry(
                 PathPlannerTrajectories.startStateStraightNinety,
@@ -88,6 +92,11 @@ public class RobotContainer {
         // TeleopAim(swerve, new Translation2d(5.0, 5.0)));
         // mainController.buttonB.whileActiveOnce(
         //         swerveCommands.variableVelocity(this::getSwerveAngle));
+        mainController.buttonX.whenHeld(m_superstructure.intakeCommands.deploy());
+    }
+
+    public void configureSmartDashboardLogging() {
+        SmartDashboard.putNumber("Wrist Intake Pos", 0.0);
     }
 
     public Command getAutonomousCommand() {
@@ -115,6 +124,20 @@ public class RobotContainer {
                     SwerveDriveConstants.kBackLeftModule,
                     SwerveDriveConstants.kBackRightModule,
                     SwerveDriveConstants.kGyro);
+    public final WristIntake m_wristIntake =
+            new WristIntake(
+                    WristIntakeConstants.kDeployMotor,
+                    WristIntakeConstants.kIntakeMotor,
+                    WristIntakeConstants.kDeployFeedForward,
+                    WristIntakeConstants.kIntakeFeedForward,
+                    GlobalConstants.kDt,
+                    WristIntakeConstants.kIntakeNativeVelToSurfaceMpS,
+                    WristIntakeConstants.kDeployNativeVelocityToDegpS,
+                    WristIntakeConstants.kDeployNativePositionToDegrees,
+                    WristIntakeConstants.kNominalVoltage,
+                    WristIntakeConstants.maxDeployVelocityDegPerSec,
+                    WristIntakeConstants.intakableDegree,
+                    WristIntakeConstants.zeroDeg);
 
     final FlightDeck m_flightDeck =
             new FlightDeck(
@@ -135,7 +158,7 @@ public class RobotContainer {
                     m_flightDeck::addVisionObservation,
                     this::updateTapeTranslations);
 
-    final Superstructure m_superstructure = new Superstructure(m_flightDeck);
+    final Superstructure m_superstructure = new Superstructure(m_flightDeck, m_wristIntake);
 
     private final CommandScheduler scheduler = CommandScheduler.getInstance();
 

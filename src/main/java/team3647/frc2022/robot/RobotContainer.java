@@ -12,10 +12,12 @@ import java.util.List;
 import team3647.frc2022.autonomous.AutoCommands;
 import team3647.frc2022.autonomous.PathPlannerTrajectories;
 import team3647.frc2022.commands.SwerveDriveNoAim;
+import team3647.frc2022.constants.ColumnConstants;
 import team3647.frc2022.constants.GlobalConstants;
 import team3647.frc2022.constants.SwerveDriveConstants;
 import team3647.frc2022.constants.VisionConstants;
 import team3647.frc2022.constants.WristIntakeConstants;
+import team3647.frc2022.subsystems.Column;
 import team3647.frc2022.subsystems.Superstructure;
 import team3647.frc2022.subsystems.SwerveDrive;
 import team3647.frc2022.subsystems.WristIntake;
@@ -140,6 +142,15 @@ public class RobotContainer {
                     WristIntakeConstants.maxDeployVelocityDegPerSec,
                     WristIntakeConstants.intakableDegree,
                     WristIntakeConstants.zeroDeg);
+    public final Column m_column =
+            new Column(
+                    ColumnConstants.kColumnMotor,
+                    ColumnConstants.kTopBanner,
+                    ColumnConstants.kNativeVelToSurfaceMpS,
+                    ColumnConstants.kPosConversion,
+                    ColumnConstants.kNominalVoltage,
+                    GlobalConstants.kDt,
+                    ColumnConstants.kFeedForward);
 
     final FlightDeck m_flightDeck =
             new FlightDeck(
@@ -160,7 +171,8 @@ public class RobotContainer {
                     m_flightDeck::addVisionObservation,
                     this::updateTapeTranslations);
 
-    final Superstructure m_superstructure = new Superstructure(m_flightDeck, m_wristIntake);
+    final Superstructure m_superstructure =
+            new Superstructure(m_flightDeck, m_wristIntake, m_column);
 
     private final CommandScheduler scheduler = CommandScheduler.getInstance();
 

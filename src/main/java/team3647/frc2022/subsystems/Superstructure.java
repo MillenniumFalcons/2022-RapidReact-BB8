@@ -2,6 +2,9 @@ package team3647.frc2022.subsystems;
 
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj2.command.Command;
+import java.util.function.DoubleSupplier;
+import team3647.frc2022.commands.ColumnCommands;
 import team3647.frc2022.commands.IntakeCommands;
 import team3647.lib.tracking.FlightDeck;
 import team3647.lib.vision.AimingParameters;
@@ -14,13 +17,17 @@ public class Superstructure {
     private double turretVelFF = 0.0;
     private final FlightDeck deck;
     private final WristIntake m_intake;
+    private final Column m_column;
 
     public final IntakeCommands intakeCommands;
+    public final ColumnCommands columnCommands;
 
-    public Superstructure(FlightDeck deck, WristIntake m_intake) {
+    public Superstructure(FlightDeck deck, WristIntake m_intake, Column m_column) {
         this.deck = deck;
         this.m_intake = m_intake;
+        this.m_column = m_column;
         intakeCommands = new IntakeCommands(m_intake);
+        columnCommands = new ColumnCommands(m_column);
     }
 
     public void periodic(double timestamp) {
@@ -57,5 +64,9 @@ public class Superstructure {
 
     public double getAngleToTarget() {
         return this.angleToTarget;
+    }
+
+    public Command feederWithSensor(DoubleSupplier surfaceVelocity) {
+        return columnCommands.getGoVariableVelocity(() -> 1).until(m_column::getTopBannerValue);
     }
 }

@@ -8,37 +8,37 @@ import java.util.function.DoubleSupplier;
 import team3647.frc2022.subsystems.Column;
 
 public class ColumnCommands {
-    private final Column columnTop;
+    private final Column column;
 
-    public ColumnCommands(Column columnTop) {
-        this.columnTop = columnTop;
+    public ColumnCommands(Column column) {
+        this.column = column;
     }
 
     public Command getGoVariableVelocity(DoubleSupplier surfaceVelMpSFunction) {
         return new FunctionalCommand(
                 () -> {},
-                () -> columnTop.setSurfaceVelocity(surfaceVelMpSFunction.getAsDouble()),
-                interrupted -> columnTop.setOpenloop(0),
+                () -> column.setSurfaceVelocity(surfaceVelMpSFunction.getAsDouble()),
+                interrupted -> column.setOpenloop(0),
                 () -> false,
-                columnTop);
+                column);
     }
 
     public Command getRunInwards() {
         return new FunctionalCommand(
                 () -> {},
-                () -> columnTop.setOpenloop(0.3),
-                interrupted -> columnTop.setOpenloop(0),
+                () -> column.setOpenloop(0.3),
+                interrupted -> column.setOpenloop(0),
                 () -> false,
-                columnTop);
+                column);
     }
 
     public Command getRunOutwards() {
         return new FunctionalCommand(
                 () -> {},
-                () -> columnTop.setOpenloop(-0.3),
-                interrupted -> columnTop.setOpenloop(0),
+                () -> column.setOpenloop(-0.3),
+                interrupted -> column.setOpenloop(0),
                 () -> false,
-                columnTop);
+                column);
     }
 
     public Command getRunInwardsUntil(BooleanSupplier interruptOn) {
@@ -50,6 +50,6 @@ public class ColumnCommands {
     }
 
     public Command getEndSequence() {
-        return new RunCommand(columnTop::end, columnTop);
+        return new RunCommand(column::end, column);
     }
 }

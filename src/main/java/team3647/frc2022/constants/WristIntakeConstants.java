@@ -9,18 +9,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.util.Units;
 import team3647.lib.drivers.LazyTalonFX;
 
 /** Add your docs here. */
 public class WristIntakeConstants {
     public static final InvertType kIntakeMotorInverted = InvertType.InvertMotorOutput;
-    public static final InvertType kDeployMotorInverted = InvertType.InvertMotorOutput;
+    public static final InvertType kDeployMotorInverted = InvertType.None;
     public static final TalonFXConfiguration kIntakeMotorConfig = new TalonFXConfiguration();
     public static final TalonFXConfiguration kDeployMotorConfig = new TalonFXConfiguration();
 
-    public static final double intakableDegree = 132.3;
+    public static final double intakableDegree = 60.0;
     public static final double zeroDeg = 0.0;
-    public static final double maxDeployVelocityDegPerSec = 40;
+    public static final double maxDeployVelocityDegPerSec = Units.degreesToRadians(40.0);
 
     public static final double kIntakeS = 0.75412;
     public static final double kIntakeV = 0.72691;
@@ -28,13 +29,13 @@ public class WristIntakeConstants {
     public static final SimpleMotorFeedforward kIntakeFeedForward =
             new SimpleMotorFeedforward(kIntakeS, kIntakeV, kIntakeA);
 
-    public static final double kDeployS = 0;
-    public static final double kDeployV = 0;
-    public static final double kDeployA = 0;
+    public static final double kDeployS = 8.85;
+    public static final double kDeployG = 1.013;
+    public static final double kDeployA = 0.0032323;
     public static final ArmFeedforward kDeployFeedForward =
-            new ArmFeedforward(kDeployS, kDeployV, kDeployA);
+            new ArmFeedforward(kDeployS, kDeployG, kDeployA);
 
-    public static final double kNominalVoltage = 10;
+    public static final double kNominalVoltage = 10.0;
 
     public static final TalonFX kIntakeMotor =
             new LazyTalonFX(GlobalConstants.IntakeIds.kIntakeMotorId);
@@ -43,8 +44,8 @@ public class WristIntakeConstants {
 
     public static final double kWheelDiameterMeters = 0.0762;
 
-    public static final double kDeployGearboxReduction = 1.0 / 5.33;
-    public static final double kIntakeGearboxReduction = 1.0 / 35.0;
+    public static final double kDeployGearboxReduction = 1.0 / 35.0;
+    public static final double kIntakeGearboxReduction = 1.0 / 5.33;
 
     public static final double kIntakeWheelRotationToMeters =
             kWheelDiameterMeters * Math.PI * kIntakeGearboxReduction;
@@ -62,7 +63,7 @@ public class WristIntakeConstants {
         kIntakeMotorConfig.slot0.kD = 0;
         kIntakeMotorConfig.slot0.kF = 0;
 
-        kDeployMotorConfig.slot0.kP = 0.1;
+        kDeployMotorConfig.slot0.kP = 1.5;
         kDeployMotorConfig.slot0.kI = 0;
         kDeployMotorConfig.slot0.kD = 0;
         kDeployMotorConfig.slot0.kF = 0;

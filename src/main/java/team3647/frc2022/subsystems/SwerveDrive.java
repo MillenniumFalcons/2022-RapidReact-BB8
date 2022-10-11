@@ -30,6 +30,7 @@ public class SwerveDrive implements PeriodicSubsystem {
         public double timestamp = 0;
         public boolean isOpenLoop = true;
         public double heading = 0;
+        public double rawHeading = 0;
 
         public SwerveModuleState frontLeftState = new SwerveModuleState();
         public SwerveModuleState frontRightState = new SwerveModuleState();
@@ -53,6 +54,7 @@ public class SwerveDrive implements PeriodicSubsystem {
         this.backLeft = backLeft;
         this.backRight = backRight;
         this.gyro = gyro;
+        calibrateGyro();
         this.odometry =
                 new SwerveDriveOdometry(
                         SwerveDriveConstants.kDriveKinematics,
@@ -64,12 +66,13 @@ public class SwerveDrive implements PeriodicSubsystem {
         resetEncoders();
         resetOdometry();
         zeroHeading();
+        calibrateGyro();
     }
 
     @Override
     public void readPeriodicInputs() {
         periodicIO.heading = Math.IEEEremainder(gyro.getYaw(), 360);
-        // periodicIO.heading = gyro.getYaw();
+        periodicIO.rawHeading = gyro.getYaw();
         periodicIO.frontLeftState = frontLeft.getState();
         periodicIO.frontRightState = frontRight.getState();
         periodicIO.backLeftState = backLeft.getState();
@@ -258,8 +261,17 @@ public class SwerveDrive implements PeriodicSubsystem {
         gyro.setYaw(0);
     }
 
+    public void calibrateGyro() {
+        gyro.configZAxisGyroError(1.0);
+        System.out.println("I'm calibratet boyz!");
+    }
+
     public double getHeading() {
         return periodicIO.heading;
+    }
+
+    public double getRawHeading() {
+        return periodicIO.rawHeading;
     }
 
     public Rotation2d getRotation2d() {

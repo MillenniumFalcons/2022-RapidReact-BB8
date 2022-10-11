@@ -10,7 +10,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.PeriodicSubsystem;
 
 public class WristIntake implements PeriodicSubsystem {
@@ -105,8 +104,6 @@ public class WristIntake implements PeriodicSubsystem {
                 periodicIO.deployDemand,
                 DemandType.ArbitraryFeedForward,
                 periodicIO.deployff / nominalVoltage);
-
-        SmartDashboard.putNumber("Wrist Deg", periodicIO.deployDeg);
     }
 
     @Override
@@ -115,8 +112,15 @@ public class WristIntake implements PeriodicSubsystem {
         writePeriodicOutputs();
     }
 
+    public double getDegrees() {
+        return periodicIO.deployDeg;
+    }
+
     public void extend(double deg) {
         setDegMotionMagic(deg, degff.calculate(Units.degreesToRadians(intakableDeg), maxDeployVel));
+        System.out.println("Here: " + periodicIO.deployDeg);
+        System.out.println(
+                "There: " + degff.calculate(Units.degreesToRadians(intakableDeg), maxDeployVel));
     }
 
     public void extend() {
@@ -152,6 +156,10 @@ public class WristIntake implements PeriodicSubsystem {
 
     public double getVelocity() {
         return periodicIO.intakeVel;
+    }
+
+    public void resetEncoders() {
+        deployMotor.setSelectedSensorPosition(0.0);
     }
 
     @Override

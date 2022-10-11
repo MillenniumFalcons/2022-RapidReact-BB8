@@ -39,7 +39,7 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        scheduler.registerSubsystem(m_swerve, m_printer, m_visionController);
+        scheduler.registerSubsystem(m_swerve, m_printer, m_visionController, m_wristIntake);
 
         // m_swerve.setDefaultCommand(
         //         new SwerveDriveTeleopBaseFalcon(
@@ -70,6 +70,8 @@ public class RobotContainer {
         configureButtonBindings();
         configureSmartDashboardLogging();
         SmartDashboard.putNumber("Swerve Angle", 0.0);
+        m_printer.addDouble("Intake Angle", () -> m_wristIntake.getDegrees());
+        m_printer.addDouble("Raw Rotation", () -> m_swerve.getRawHeading());
         m_swerve.setOdometry(
                 PathPlannerTrajectories.startStateStraightNinety,
                 new Rotation2d(Units.degreesToRadians(0)));

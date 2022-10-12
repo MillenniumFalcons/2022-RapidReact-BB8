@@ -17,17 +17,16 @@ public class IntakeCommands {
         return new InstantCommand(intake::extend);
     }
 
-    public Command retract() {
-        return new InstantCommand(intake::retract);
-    }
+    // public Command retract() {
+    //     // return new InstantCommand(intake::retract);
+    // }
 
-    public Command runOpenLoop(double percentOut) {
+    public Command runOpenLoop(DoubleSupplier percentOut) {
         return new FunctionalCommand(
                 () -> {},
-                () -> intake.setOpenloop(percentOut),
+                () -> intake.setDemanOpenLoop(percentOut.getAsDouble()),
                 interrupted -> {
-                    intake.setOpenloop(0);
-                    intake.retract();
+                    intake.setDemanOpenLoop(0);
                 },
                 () -> false,
                 intake);
@@ -50,7 +49,7 @@ public class IntakeCommands {
                 () -> intake.setSurfaceVelocity(surfaceVel.getAsDouble()),
                 interrupted -> {
                     intake.setOpenloop(0);
-                    intake.retract();
+                    // intake.retract();
                 },
                 () -> false,
                 intake);

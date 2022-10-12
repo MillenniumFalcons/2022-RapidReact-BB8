@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import team3647.lib.drivers.LazyTalonFX;
 
@@ -22,6 +23,7 @@ public class WristIntakeConstants {
     public static final double intakableDegree = 60.0;
     public static final double zeroDeg = 0.0;
     public static final double maxDeployVelocityDegPerSec = Units.degreesToRadians(40.0);
+    public static final double maxDeployAccelDegPerSecSq = Units.degreesToRadians(2);
 
     public static final double kIntakeS = 0.75412;
     public static final double kIntakeV = 0.72691;
@@ -33,7 +35,7 @@ public class WristIntakeConstants {
     public static final double kDeployG = 1.013;
     public static final double kDeployA = 0.0032323;
     public static final ArmFeedforward kDeployFeedForward =
-            new ArmFeedforward(kDeployS, kDeployG, kDeployA);
+            new ArmFeedforward(kDeployS, 0.0, kDeployG);
 
     public static final double kNominalVoltage = 10.0;
 
@@ -41,6 +43,9 @@ public class WristIntakeConstants {
             new LazyTalonFX(GlobalConstants.IntakeIds.kIntakeMotorId);
     public static final TalonFX kDeployMotor =
             new LazyTalonFX(GlobalConstants.IntakeIds.kDeployMotorId);
+
+    public static final TrapezoidProfile.Constraints motionConstraints =
+            new TrapezoidProfile.Constraints(maxDeployVelocityDegPerSec, maxDeployAccelDegPerSecSq);
 
     public static final double kWheelDiameterMeters = 0.0762;
 
@@ -66,7 +71,8 @@ public class WristIntakeConstants {
         kDeployMotorConfig.slot0.kP = 1.5;
         kDeployMotorConfig.slot0.kI = 0;
         kDeployMotorConfig.slot0.kD = 0;
-        kDeployMotorConfig.slot0.kF = 0;
+        kDeployMotorConfig.slot0.kF =
+                kDeployG / kNominalVoltage * kDeployNativeVelocityToDegpS * 1023;
 
         kIntakeMotorConfig.voltageCompSaturation = kNominalVoltage;
         kDeployMotorConfig.voltageCompSaturation = kNominalVoltage;

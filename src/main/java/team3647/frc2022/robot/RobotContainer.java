@@ -97,6 +97,8 @@ public class RobotContainer {
         // mainController.buttonB.whileActiveOnce(
         //         swerveCommands.variableVelocity(this::getSwerveAngle));
         mainController.buttonX.whenHeld(m_superstructure.intakeCommands.deploy());
+        // mainController.buttonX.whenHeld(new InstantCommand(m_wristIntake::increaseDemand));
+        // mainController.buttonB.whenHeld(new InstantCommand(m_wristIntake::increaseFF));
     }
 
     public void configureSmartDashboardLogging() {
@@ -132,8 +134,10 @@ public class RobotContainer {
             new WristIntake(
                     WristIntakeConstants.kDeployMotor,
                     WristIntakeConstants.kIntakeMotor,
-                    WristIntakeConstants.kDeployFeedForward,
+                    WristIntakeConstants.kDeployS,
+                    //     WristIntakeConstants.kDeployFeedForward,
                     WristIntakeConstants.kIntakeFeedForward,
+                    WristIntakeConstants.motionConstraints,
                     GlobalConstants.kDt,
                     WristIntakeConstants.kIntakeNativeVelToSurfaceMpS,
                     WristIntakeConstants.kDeployNativeVelocityToDegpS,

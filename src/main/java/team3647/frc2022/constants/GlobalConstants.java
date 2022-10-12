@@ -37,30 +37,30 @@ public final class GlobalConstants {
         public static final int kBackRightTurnId = 8;
         public static final int kBackRightAbsEncoderPort = 12;
 
-        public static final int gyroPin = 16;
+        public static final int gyroPin = 20;
     }
 
     public static final class IntakeIds {
-        public static final int kIntakeMotorId = 10;
-        public static final int kDeployMotorId = 11;
+        public static final int kIntakeMotorId = 13;
+        public static final int kDeployMotorId = 14;
     }
 
     public static final class ColumnIds {
-        public static final int kMasterMotorId = 0;
-        public static final int kTopSensorPin = 0;
+        public static final int kMasterMotorId = 15;
+        public static final int kTopSensorPin = 4;
     }
 
     public static final class TurretIds {
-        public static final int kMotorId = 0;
+        public static final int kMotorId = 16;
     }
 
     public static final class HoodIds {
-        public static final int kMotorId = 0;
+        public static final int kMotorId = 17;
     }
 
     public static final class FlywheelIds {
-        public static final int kMasterId = 0;
-        public static final int kFollowerId = 0;
+        public static final int kMasterId = 18;
+        public static final int kFollowerId = 19;
     }
 
     private GlobalConstants() {}

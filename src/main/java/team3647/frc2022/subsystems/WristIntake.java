@@ -7,16 +7,19 @@ package team3647.frc2022.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import edu.wpi.first.math.controller.ArmFeedforward;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import team3647.lib.PeriodicSubsystem;
 
 public class WristIntake implements PeriodicSubsystem {
     private final TalonFX deployMotor;
     private final TalonFX intakeMotor;
-    private final ArmFeedforward degff;
+    // private final ArmFeedforward degff;
+    // private final SimpleMotorFeedforward degff;
+
     private final SimpleMotorFeedforward speedff;
+    private final double kS;
     private final double kDt;
 
     private PeriodicIO periodicIO = new PeriodicIO();
@@ -31,12 +34,16 @@ public class WristIntake implements PeriodicSubsystem {
 
     private final double intakableDeg;
     private final double zeroDeg;
+    private final TrapezoidProfile.Constraints profileConstraints;
 
     public WristIntake(
             TalonFX deployMotor,
             TalonFX intakeMotor,
-            ArmFeedforward degff,
+            // ArmFeedforward degff,
+            double kS,
+            // SimpleMotorFeedforward degff,
             SimpleMotorFeedforward speedff,
+            TrapezoidProfile.Constraints profileConstraints,
             double kDt,
             double intakeVelocityConversion,
             double deployVelocityConversion,
@@ -49,10 +56,12 @@ public class WristIntake implements PeriodicSubsystem {
         this.deployMotor = deployMotor;
         this.intakeMotor = intakeMotor;
 
+        this.kS = kS;
+
         this.maxDeployVel = maxDeployVel;
 
         // for deploy pos
-        this.degff = degff;
+        // this.degff = degff;
         // for intake speed
         this.speedff = speedff;
 
@@ -62,6 +71,7 @@ public class WristIntake implements PeriodicSubsystem {
         this.intakableDeg = intakableDeg;
         this.zeroDeg = zeroDeg;
         this.kDt = kDt;
+        this.profileConstraints = profileConstraints;
         this.nominalVoltage = nominalVoltage;
     }
 
@@ -104,6 +114,8 @@ public class WristIntake implements PeriodicSubsystem {
                 periodicIO.deployDemand,
                 DemandType.ArbitraryFeedForward,
                 periodicIO.deployff / nominalVoltage);
+        System.out.println("Demand : " + periodicIO.deployDemand);
+        System.out.println("FF : " + periodicIO.deployff);
     }
 
     @Override
@@ -116,22 +128,35 @@ public class WristIntake implements PeriodicSubsystem {
         return periodicIO.deployDeg;
     }
 
+    // public void extend(double deg) {
+    //     setDegMotionMagic(deg, degff.calculate(Units.degreesToRadians(intakableDeg),
+    // maxDeployVel));
+    //     System.out.println("Here: " + periodicIO.deployDeg);
+    //     System.out.println(
+    //             "There: " + degff.calculate(Units.degreesToRadians(intakableDeg), maxDeployVel));
+    // }
+
     public void extend(double deg) {
-        setDegMotionMagic(deg, degff.calculate(Units.degreesToRadians(intakableDeg), maxDeployVel));
-        System.out.println("Here: " + periodicIO.deployDeg);
-        System.out.println(
-                "There: " + degff.calculate(Units.degreesToRadians(intakableDeg), maxDeployVel));
+        this.setAngleMotionMagic(deg);
     }
 
     public void extend() {
         // check sign
-        extend(this.intakableDeg);
+        extend(60.0);
     }
 
-    public void retract() {
-        setDegMotionMagic(
-                this.zeroDeg, degff.calculate(Units.degreesToRadians(zeroDeg), maxDeployVel));
+    public void increaseDemand() {
+        periodicIO.deployDemand += 100;
     }
+
+    public void increaseFF() {
+        periodicIO.deployff += 0.1;
+    }
+
+    // public void retract() {
+    //     this.setDegMotionMagic(
+    //             this.zeroDeg, degff.calculate(Units.degreesToRadians(zeroDeg), maxDeployVel));
+    // }
 
     // vel in m/s surface vel
     public void setSurfaceVelocity(double vel) {
@@ -140,12 +165,48 @@ public class WristIntake implements PeriodicSubsystem {
         periodicIO.intakeDemand = vel / intakeVelocityConversion;
     }
 
+    public void setAngleMotionMagic(double angle) {
+        double multiplier = Math.signum(angle - getDegrees());
+        periodicIO.deployDemand = MathUtil.clamp(angle, -10, 180) / deployPositionConversion;
+        periodicIO.deployff = kS * multiplier;
+    }
+
     // position in deg, ff in volts
-    public void setDegMotionMagic(double position, double feedforward) {
+    public void setDegMotionMagic(double positionDeg, double feedforward) {
         periodicIO.deployControlMode = ControlMode.MotionMagic;
         periodicIO.deployff = feedforward;
         // convert to set to native
-        periodicIO.deployDemand = position / deployPositionConversion;
+        periodicIO.deployDemand = positionDeg / deployPositionConversion;
+    }
+
+    public void setDemanOpenLoop(double openLoop) {
+        periodicIO.deployControlMode = ControlMode.PercentOutput;
+        periodicIO.deployDemand = openLoop;
+        periodicIO.deployff = 0;
+    }
+
+    public void setDegMotionProfile(double positionDeg, double velocity) {
+        periodicIO.deployControlMode = ControlMode.MotionMagic;
+        TrapezoidProfile profile =
+                new TrapezoidProfile(
+                        this.profileConstraints,
+                        new TrapezoidProfile.State(getDegrees(), getVelocity()),
+                        new TrapezoidProfile.State(positionDeg, velocity));
+
+        var state = profile.calculate(0.02);
+        // Multiply the static friction volts by -1 if our target position is less than current
+        // position; if we need to move backwards, the volts needs to be negative
+        // double ffVolts = degff.calculate(state.position, state.velocity);
+        // if (Math.abs(ffVolts) < 0.000001) {
+        //     ffVolts = kS * Math.signum(state.position - getPosition());
+        // }
+
+        // System.out.println("Position: " + state.position);
+        // System.out.println("Velocity: " + state.velocity);
+        // periodicIO.deployff = ffVolts;
+        periodicIO.deployDemand = state.position;
+        System.out.println("FF : " + periodicIO.deployff);
+        System.out.println("Demand : " + periodicIO.deployDemand);
     }
 
     public void setOpenloop(double output) {

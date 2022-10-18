@@ -4,6 +4,7 @@
 
 package team3647.frc2022.commands;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.BooleanSupplier;
@@ -13,6 +14,8 @@ import team3647.frc2022.subsystems.SwerveDrive;
 
 public class SwerveDriveNoAim extends CommandBase {
     private final SwerveDrive swerve;
+    private final SlewRateLimiter m_x_accelerationLimiter = new SlewRateLimiter(2);
+    private final SlewRateLimiter m_y_accelerationLimiter = new SlewRateLimiter(2);
 
     private final DoubleSupplier xSpeedFunction;
     private final DoubleSupplier ySpeedFunction;
@@ -48,7 +51,14 @@ public class SwerveDriveNoAim extends CommandBase {
     @Override
     public void execute() {
         double xComponent = ySpeedFunction.getAsDouble() * translateMultiplier;
+        xComponent =
+                m_x_accelerationLimiter.calculate(
+                        xComponent * xComponent * Math.signum(xComponent));
         double yComponent = -xSpeedFunction.getAsDouble() * translateMultiplier;
+        yComponent =
+                m_y_accelerationLimiter.calculate(
+                        yComponent * yComponent * Math.signum(yComponent));
+
         translation =
                 new Translation2d(xComponent, yComponent)
                         .times(SwerveDriveConstants.kDrivePossibleMaxSpeedMPS);
@@ -56,8 +66,9 @@ public class SwerveDriveNoAim extends CommandBase {
                 -turnSpeedFunction.getAsDouble()
                         * SwerveDriveConstants.kRotPossibleMaxSpeedRadPerSec
                         * rotationMultiplier;
+        rotation = rotation * rotation * Math.signum(rotation) * 0.8;
 
-        swerve.drive(translation, rotation, getIsFieldOriented.getAsBoolean(), false);
+        swerve.drive(translation, rotation, getIsFieldOriented.getAsBoolean(), true);
     }
 
     // Called once the command ends or is interrupted.

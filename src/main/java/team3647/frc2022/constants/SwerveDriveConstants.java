@@ -7,6 +7,7 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix.sensors.Pigeon2Configuration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -57,6 +58,9 @@ public class SwerveDriveConstants {
             new LazyTalonFX(GlobalConstants.SwerveDriveIds.kBackRightTurnId);
     public static final CANCoder kBackRightAbsEncoder =
             new CANCoder(GlobalConstants.SwerveDriveIds.kBackRightAbsEncoderPort);
+
+    public static final Pigeon2Configuration kGyroConfig = new Pigeon2Configuration();
+
     // config swerve module reversed here, module class doens't reverse for you
 
     // distance between right and left wheels
@@ -88,7 +92,6 @@ public class SwerveDriveConstants {
     public static final double kDriveMotorGearRatio = 1 / 6.75;
     //     public static final double kTurnMotorGearRatio = 15.0 / 32.0 * 10.0 / 60.0;
     public static final double kTurnMotorGearRatio = 7.0 / 150.0;
-
     public static final double kWheelDiameterMeters = Units.inchesToMeters(4.0);
 
     //     public static final double kWheelRotationToMetersDrive =
@@ -127,7 +130,7 @@ public class SwerveDriveConstants {
     public static final double kAbsFrontLeftEncoderOffsetDeg = 32.6953125; // 35.66 - 2.8767;
     public static final double kAbsFrontRightEncoderOffsetDeg = 322.6660 + 9.5; // 333.28 + 0.0866;
     public static final double kAbsBackLeftEncoderOffsetDeg = 36.386718; // 36.39 - 0.1725;
-    public static final double kAbsBackRightEncoderOffsetDeg = 148.886; // 148.97 + 0.8740;
+    public static final double kAbsBackRightEncoderOffsetDeg = 146.886; // 148.97 + 0.8740;
 
     // max speed limits that we want
     public static final double kTeleopDriveMaxAccelUnitsPerSec = kDrivePossibleMaxSpeedMPS / 2;
@@ -248,6 +251,8 @@ public class SwerveDriveConstants {
 
     static {
         kGyro.configFactoryDefault();
+        kGyroConfig.ZAxisGyroError = 0.3;
+        kGyro.configAllSettings(kGyroConfig);
         // encoder feedback alredy continous for turn motor?
         kFrontLeftDrive.configFactoryDefault();
         kFrontRightDrive.configFactoryDefault();

@@ -19,7 +19,6 @@ public class DeployIntake extends CommandBase {
     @Override
     public void execute() {
         wristIntake.extend();
-        System.out.println("RUUUUUUUN!");
     }
 
     // Called once the command ends or is interrupted.

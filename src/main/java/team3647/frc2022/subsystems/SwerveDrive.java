@@ -54,7 +54,6 @@ public class SwerveDrive implements PeriodicSubsystem {
         this.backLeft = backLeft;
         this.backRight = backRight;
         this.gyro = gyro;
-        calibrateGyro();
         this.odometry =
                 new SwerveDriveOdometry(
                         SwerveDriveConstants.kDriveKinematics,
@@ -63,10 +62,10 @@ public class SwerveDrive implements PeriodicSubsystem {
 
     @Override
     public void init() {
+        System.out.println("init-ed swerve bruh i wanna die");
         resetEncoders();
         resetOdometry();
         zeroHeading();
-        calibrateGyro();
     }
 
     @Override
@@ -259,11 +258,6 @@ public class SwerveDrive implements PeriodicSubsystem {
 
     public void zeroHeading() {
         gyro.setYaw(0);
-    }
-
-    public void calibrateGyro() {
-        gyro.configZAxisGyroError(1.0);
-        System.out.println("I'm calibratet boyz!");
     }
 
     public double getHeading() {

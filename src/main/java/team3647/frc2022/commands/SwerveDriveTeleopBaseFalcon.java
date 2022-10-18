@@ -80,7 +80,7 @@ public class SwerveDriveTeleopBaseFalcon extends CommandBase {
                                                     this.arbitoryTarget)))
                             * 5;
         }
-        swerve.drive(translation, rotation, getIsFieldOriented.getAsBoolean(), false);
+        swerve.drive(translation, rotation, getIsFieldOriented.getAsBoolean(), true);
     }
 
     private double angleBetweenPointsInDeg(Translation2d point1, Translation2d point2) {

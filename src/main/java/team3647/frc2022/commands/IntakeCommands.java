@@ -21,17 +21,6 @@ public class IntakeCommands {
     //     // return new InstantCommand(intake::retract);
     // }
 
-    public Command runOpenLoop(DoubleSupplier percentOut) {
-        return new FunctionalCommand(
-                () -> {},
-                () -> intake.setDemanOpenLoop(percentOut.getAsDouble()),
-                interrupted -> {
-                    intake.setDemanOpenLoop(0);
-                },
-                () -> false,
-                intake);
-    }
-
     public Command openLoopAndStop(double percentOut) {
         return new FunctionalCommand(
                 () -> {},

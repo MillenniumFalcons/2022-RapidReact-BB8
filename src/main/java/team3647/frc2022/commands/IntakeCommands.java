@@ -2,8 +2,8 @@ package team3647.frc2022.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import java.util.function.DoubleSupplier;
+import team3647.frc2022.constants.WristIntakeConstants;
 import team3647.frc2022.subsystems.WristIntake;
 
 public class IntakeCommands {
@@ -14,7 +14,12 @@ public class IntakeCommands {
     }
 
     public Command deploy() {
-        return new InstantCommand(intake::extend);
+        return new FunctionalCommand(
+                () -> {},
+                () -> intake.extend(),
+                interrupted -> {},
+                () -> Math.abs(intake.getDegrees() - WristIntakeConstants.intakableDegree) < 1.0,
+                intake);
     }
 
     // public Command retract() {

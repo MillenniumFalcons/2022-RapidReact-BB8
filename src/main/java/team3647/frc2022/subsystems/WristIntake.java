@@ -8,18 +8,20 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.PeriodicSubsystem;
 
 public class WristIntake implements PeriodicSubsystem {
     private final TalonFX deployMotor;
     private final TalonFX intakeMotor;
-    // private final ArmFeedforward degff;
+    private final ArmFeedforward degff;
     // private final SimpleMotorFeedforward degff;
 
     private final SimpleMotorFeedforward speedff;
-    private final double kS;
     private final double kDt;
 
     private PeriodicIO periodicIO = new PeriodicIO();
@@ -39,8 +41,7 @@ public class WristIntake implements PeriodicSubsystem {
     public WristIntake(
             TalonFX deployMotor,
             TalonFX intakeMotor,
-            // ArmFeedforward degff,
-            double kS,
+            ArmFeedforward degff,
             // SimpleMotorFeedforward degff,
             SimpleMotorFeedforward speedff,
             TrapezoidProfile.Constraints profileConstraints,
@@ -56,16 +57,15 @@ public class WristIntake implements PeriodicSubsystem {
         this.deployMotor = deployMotor;
         this.intakeMotor = intakeMotor;
 
-        this.kS = kS;
-
         this.maxDeployVel = maxDeployVel;
 
         // for deploy pos
         // this.degff = degff;
         // for intake speed
         this.speedff = speedff;
-
+        this.degff = degff;
         this.intakeVelocityConversion = intakeVelocityConversion;
+
         this.deployVelocityConversion = deployVelocityConversion;
         this.deployPositionConversion = deployPositionConversion;
         this.intakableDeg = intakableDeg;
@@ -116,6 +116,10 @@ public class WristIntake implements PeriodicSubsystem {
                 periodicIO.deployDemand,
                 DemandType.ArbitraryFeedForward,
                 periodicIO.deployff / nominalVoltage);
+        SmartDashboard.putNumber(
+                "Wrist Demand", periodicIO.deployDemand * deployPositionConversion);
+        SmartDashboard.putNumber("Wrist Pos", getDegrees());
+        SmartDashboard.putNumber("FF 15 Wrist", periodicIO.deployff);
     }
 
     @Override
@@ -128,19 +132,10 @@ public class WristIntake implements PeriodicSubsystem {
         return periodicIO.deployDeg;
     }
 
-    public void extend(double deg) {
-        this.setDegMotionProfile(this.intakableDeg, this.maxDeployVel);
-    }
-
     public void extend() {
         // check sign
-        extend(60.0);
+        setDegMotionMagic(60.0);
     }
-
-    // public void retract() {
-    //     this.setDegMotionMagic(
-    //             this.zeroDeg, degff.calculate(Units.degreesToRadians(zeroDeg), maxDeployVel));
-    // }
 
     // vel in m/s surface vel
     public void setSurfaceVelocity(double vel) {
@@ -150,23 +145,11 @@ public class WristIntake implements PeriodicSubsystem {
     }
 
     // position in deg, ff in volts
-    public void setDegMotionMagic(double positionDeg, double feedforward) {
+    public void setDegMotionMagic(double positionDeg) {
         periodicIO.deployControlMode = ControlMode.MotionMagic;
-        periodicIO.deployff = feedforward;
+        periodicIO.deployff = this.degff.calculate(Units.degreesToRadians(positionDeg), 0.15);
         // convert to set to native
         periodicIO.deployDemand = positionDeg / deployPositionConversion;
-    }
-
-    public void setDegMotionProfile(double positionDeg, double velocity) {
-        periodicIO.deployControlMode = ControlMode.Position;
-        TrapezoidProfile profile =
-                new TrapezoidProfile(
-                        this.profileConstraints,
-                        new TrapezoidProfile.State(getDegrees(), getVelocity()),
-                        new TrapezoidProfile.State(positionDeg, velocity));
-
-        var state = profile.calculate(0.02);
-        periodicIO.deployDemand = state.position / deployPositionConversion;
     }
 
     public void setOpenloop(double output) {
@@ -181,6 +164,10 @@ public class WristIntake implements PeriodicSubsystem {
 
     public void resetEncoders() {
         deployMotor.setSelectedSensorPosition(0.0);
+    }
+
+    public void zeroFF() {
+        periodicIO.deployff = 0.0;
     }
 
     @Override

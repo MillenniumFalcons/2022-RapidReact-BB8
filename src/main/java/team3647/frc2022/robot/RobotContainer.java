@@ -96,7 +96,8 @@ public class RobotContainer {
         // TeleopAim(swerve, new Translation2d(5.0, 5.0)));
         // mainController.buttonB.whileActiveOnce(
         //         swerveCommands.variableVelocity(this::getSwerveAngle));
-        mainController.buttonX.whenHeld(m_superstructure.intakeCommands.deploy());
+        mainController.rightTrigger.whileActiveOnce(
+                m_superstructure.intakeCommands.deploy().perpetually());
         // mainController.buttonX.whenHeld(new InstantCommand(m_wristIntake::increaseDemand));
         // mainController.buttonB.whenHeld(new InstantCommand(m_wristIntake::increaseFF));
     }
@@ -134,8 +135,7 @@ public class RobotContainer {
             new WristIntake(
                     WristIntakeConstants.kDeployMotor,
                     WristIntakeConstants.kIntakeMotor,
-                    WristIntakeConstants.kDeployS,
-                    //     WristIntakeConstants.kDeployFeedForward,
+                    WristIntakeConstants.kDeployFeedForward,
                     WristIntakeConstants.kIntakeFeedForward,
                     WristIntakeConstants.motionConstraints,
                     GlobalConstants.kDt,

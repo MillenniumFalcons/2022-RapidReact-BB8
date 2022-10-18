@@ -22,7 +22,7 @@ public class WristIntakeConstants {
 
     public static final double intakableDegree = 60.0;
     public static final double zeroDeg = 0.0;
-    public static final double maxDeployVelocityDegPerSec = Units.degreesToRadians(40.0);
+    public static final double maxDeployVelocityDegPerSec = Units.degreesToRadians(5.0);
     public static final double maxDeployAccelDegPerSecSq = Units.degreesToRadians(2);
 
     public static final double kIntakeS = 0.75412;
@@ -31,9 +31,9 @@ public class WristIntakeConstants {
     public static final SimpleMotorFeedforward kIntakeFeedForward =
             new SimpleMotorFeedforward(kIntakeS, kIntakeV, kIntakeA);
 
-    public static final double kDeployS = 8.85;
-    public static final double kDeployG = 1.013;
-    public static final double kDeployA = 0.0032323;
+    public static final double kDeployS = 0.3;
+    public static final double kDeployG = 0.1;
+    public static final double kDeployA = 0.0;
     public static final ArmFeedforward kDeployFeedForward =
             new ArmFeedforward(kDeployS, 0.0, kDeployG);
 
@@ -68,11 +68,9 @@ public class WristIntakeConstants {
         kIntakeMotorConfig.slot0.kD = 0;
         kIntakeMotorConfig.slot0.kF = 0;
 
-        kDeployMotorConfig.slot0.kP = 1.5;
+        kDeployMotorConfig.slot0.kP = 0.3;
         kDeployMotorConfig.slot0.kI = 0;
         kDeployMotorConfig.slot0.kD = 0;
-        kDeployMotorConfig.slot0.kF =
-                kDeployG / kNominalVoltage * kDeployNativeVelocityToDegpS * 1023;
 
         kIntakeMotorConfig.voltageCompSaturation = kNominalVoltage;
         kDeployMotorConfig.voltageCompSaturation = kNominalVoltage;

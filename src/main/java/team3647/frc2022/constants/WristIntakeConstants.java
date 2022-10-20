@@ -51,6 +51,7 @@ public class WristIntakeConstants {
     public static final double kDeployMaxVelocityDegPs = 10;
     public static final double kDeployMaxAccelerationDegPss = 10;
 
+    // deploy speed
     public static final double kFalconPositionToDegrees = kDeployGearboxReduction / 2048.0 * 360;
     public static final double kFalconVelocityToDegpS = kFalconPositionToDegrees * 10;
     public static final double kDeployMaxVelocityTicks =

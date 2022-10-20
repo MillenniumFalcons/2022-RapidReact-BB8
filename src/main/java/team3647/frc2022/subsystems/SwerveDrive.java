@@ -337,6 +337,16 @@ public class SwerveDrive implements PeriodicSubsystem {
         setModuleStates(states);
     }
 
+    // public boolean isStopped(double threshold) {
+    //     return Math.abs(rightAverageSpeed.getAverage()) < threshold
+    //             && Math.abs(leftAverageSpeed.getAverage()) < threshold;
+    // }
+
+    public boolean isStopped() {
+        // return isStopped();
+        return true;
+    }
+
     @Override
     public String getName() {
         // TODO Auto-generated method stub

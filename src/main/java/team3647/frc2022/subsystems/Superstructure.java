@@ -1,45 +1,90 @@
 package team3647.frc2022.subsystems;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandGroupBase;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import team3647.frc2022.commands.ColumnCommands;
+import team3647.frc2022.commands.FlywheelCommands;
+import team3647.frc2022.commands.HoodCommands;
+import team3647.frc2022.commands.IntakeCommands;
+import team3647.frc2022.commands.WristCommands;
 import team3647.frc2022.commands.turret.TurretCommands;
+import team3647.frc2022.constants.FlywheelConstants;
+import team3647.frc2022.constants.HoodContants;
+import team3647.frc2022.constants.TurretConstants;
 import team3647.lib.tracking.FlightDeck;
 import team3647.lib.vision.AimingParameters;
 
 public class Superstructure {
 
     private AimingParameters aimingParameters;
-
+    private double flywheelVelocity = 0;
     private double angleToTarget = 0;
+    private double kickerVelocity = 0;
+    private double hoodAngle = 16;
     private double turretVelFF = 0.0;
+    private double turretSetpoint = TurretConstants.kStartingAngle;
+
     private final FlightDeck deck;
     private final Column m_column;
     private final Turret m_turret;
+    private final Hood m_hood;
+    private final Flywheel m_flywheel;
+    private final Wrist m_wrist;
+    private final Intake m_intake;
 
     public final ColumnCommands columnCommands;
     public final TurretCommands turretCommands;
+    public final HoodCommands hoodCommands;
+    public final FlywheelCommands flywheelCommands;
+    public final WristCommands wristCommands;
+    public final IntakeCommands intakeCommands;
 
-    public Superstructure(FlightDeck deck, Column m_column, Turret m_turret) {
+    private final BooleanSupplier drivetrainStopped;
+
+    public Superstructure(
+            FlightDeck deck,
+            Column m_column,
+            Turret m_turret,
+            Hood m_hood,
+            Flywheel m_flywheel,
+            Wrist m_wrist,
+            Intake m_intake,
+            BooleanSupplier drivetrainStopped) {
         this.deck = deck;
         this.m_column = m_column;
         this.m_turret = m_turret;
+        this.m_flywheel = m_flywheel;
+        this.m_wrist = m_wrist;
+        this.m_intake = m_intake;
+        this.m_hood = m_hood;
+        this.drivetrainStopped = drivetrainStopped;
         columnCommands = new ColumnCommands(m_column);
         turretCommands = new TurretCommands(m_turret);
+        hoodCommands = new HoodCommands(m_hood);
+        flywheelCommands = new FlywheelCommands(m_flywheel);
+        wristCommands = new WristCommands(m_wrist);
+        intakeCommands = new IntakeCommands(m_intake);
     }
 
     public void periodic(double timestamp) {
         aimingParameters = deck.getLatestParameters();
         if (aimingParameters != null) {
-            // flywheelVelocity =
-            // FlywheelConstants.getFlywheelRPM(aimingParameters.getRangeMeters());
-            // kickerVelocity = MathUtil.clamp(flywheelVelocity * 0.5, 0, 10);
-            // hoodAngle = HoodContants.getHoodAngle1(aimingParameters.getRangeMeters());
+            flywheelVelocity = FlywheelConstants.getFlywheelRPM(aimingParameters.getRangeMeters());
+            kickerVelocity = MathUtil.clamp(flywheelVelocity * 0.5, 0, 10);
+            hoodAngle = HoodContants.getHoodAngle1(aimingParameters.getRangeMeters());
             angleToTarget = aimingParameters.getTurretAngleToTarget().getDegrees();
-            // turretSetpoint =
-            //         m_turret.getAngle() + aimingParameters.getTurretAngleToTarget().getDegrees();
+            turretSetpoint =
+                    m_turret.getAngle() + aimingParameters.getTurretAngleToTarget().getDegrees();
             Twist2d velocity = deck.getTracker().getMeasuredVelocity();
             double tangential_component =
                     aimingParameters.getRobotToTargetTransform().getRotation().getSin()
@@ -66,13 +111,97 @@ public class Superstructure {
         return this.angleToTarget;
     }
 
-    public Command feed() {
-        return columnCommands.getRunInwards();
-    }
-
     public Command feederWithSensor(DoubleSupplier surfaceVelocity) {
         return columnCommands
                 .getGoVariableVelocity(surfaceVelocity)
                 .until(m_column::getTopBannerValue);
+    }
+
+    public Command deployAndRunIntake(DoubleSupplier surfaceVelocity) {
+        return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(surfaceVelocity));
+    }
+
+    // for testing only
+    public Command deployIntake() {
+        return wristCommands.deploy();
+    }
+
+    // for testing only
+    public Command setHood() {
+        return hoodCommands.motionMagic(35);
+    }
+
+    public Command fastAutoAccelerateAndShoot() {
+        return fastAutoAccelerateAndShoot(5, 0, 0);
+    }
+
+    public Command fastAutoAccelerateAndShoot(
+            double feederSpeed, double delayBetweenShots, double timeoutAfterDrivetrainStops) {
+        return fastAccelerateAndShoot(
+                this::getAimedFlywheelSurfaceVel,
+                this::getAimedKickerVelocity,
+                this::readyToAutoShoot,
+                feederSpeed,
+                0);
+    }
+
+    public Command fastAccelerateAndShoot(
+            DoubleSupplier flywheelVelocity,
+            DoubleSupplier kickerVelocity,
+            BooleanSupplier readyToShoot,
+            double feederSpeed,
+            double delayAfterDrivetrainStops) {
+        DoubleSupplier topSpeed = () -> 0.8;
+
+        return CommandGroupBase.parallel(
+                flywheelCommands.variableVelocity(flywheelVelocity),
+                CommandGroupBase.sequence(
+                        new ConditionalCommand(
+                                new InstantCommand(),
+                                new WaitUntilCommand(drivetrainStopped)
+                                        .andThen(new WaitCommand(delayAfterDrivetrainStops)),
+                                drivetrainStopped),
+                        new WaitUntilCommand(readyToShoot),
+                        columnCommands
+                                .getGoVariableVelocity(topSpeed)
+                                .alongWith(intakeCommands.openLoopAndStop(0.3))));
+    }
+
+    public double getAimedFlywheelSurfaceVel() {
+        return flywheelVelocity;
+    }
+
+    public double getAimedKickerVelocity() {
+        return kickerVelocity;
+    }
+
+    public boolean readyToAutoShoot() {
+        double turretSetpointNormalized =
+                getAimedTurretSetpoint() - 360.0 * Math.round(getAimedTurretSetpoint() / 360.0);
+        return Math.abs(m_flywheel.getVelocity() - getAimedFlywheelSurfaceVel()) < 0.1
+                && Math.abs(m_hood.getAngle() - getAimedHoodAngle()) < 1
+                && Math.abs(m_flywheel.getVelocity()) > 5
+                && Math.abs(getAngleToTarget()) < 1;
+    }
+
+    public double getAimedHoodAngle() {
+        return hoodAngle;
+    }
+
+    public double getAimedTurretSetpoint() {
+        return this.turretSetpoint;
+    }
+
+    public double getHoldVelocity() {
+        return 4.0;
+    }
+
+    public Command feederManual(DoubleSupplier manual) {
+        return new RunCommand(
+                () -> {
+                    var leftY = manual.getAsDouble();
+                    m_column.setOpenloop(leftY * leftY * leftY * 0.5);
+                },
+                m_column);
     }
 }

@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.PeriodicSubsystem;
 
@@ -22,6 +21,7 @@ public class WristIntake implements PeriodicSubsystem {
     // private final SimpleMotorFeedforward degff;
 
     private final SimpleMotorFeedforward speedff;
+    private TrapezoidProfile profile;
     private final double kDt;
 
     private PeriodicIO periodicIO = new PeriodicIO();
@@ -118,8 +118,9 @@ public class WristIntake implements PeriodicSubsystem {
                 periodicIO.deployff / nominalVoltage);
         SmartDashboard.putNumber(
                 "Wrist Demand", periodicIO.deployDemand * deployPositionConversion);
-        SmartDashboard.putNumber("Wrist Pos", getDegrees());
-        SmartDashboard.putNumber("FF 15 Wrist", periodicIO.deployff);
+        SmartDashboard.putNumber("Wrist Position", periodicIO.deployDeg);
+        SmartDashboard.putNumber("Deploy FF", periodicIO.deployff);
+        SmartDashboard.putNumber("Deploy velocity", periodicIO.deployVel);
     }
 
     @Override
@@ -134,7 +135,12 @@ public class WristIntake implements PeriodicSubsystem {
 
     public void extend() {
         // check sign
-        setDegMotionMagic(60.0);
+        setDegMotionProfile(110.0);
+    }
+
+    public void retract() {
+        // check sign
+        setDegMotionProfile(10.0);
     }
 
     // vel in m/s surface vel
@@ -144,12 +150,32 @@ public class WristIntake implements PeriodicSubsystem {
         periodicIO.intakeDemand = vel / intakeVelocityConversion;
     }
 
-    // position in deg, ff in volts
-    public void setDegMotionMagic(double positionDeg) {
-        periodicIO.deployControlMode = ControlMode.MotionMagic;
-        periodicIO.deployff = this.degff.calculate(Units.degreesToRadians(positionDeg), 0.15);
-        // convert to set to native
-        periodicIO.deployDemand = positionDeg / deployPositionConversion;
+    // position in deg, ff in volts shait don't use
+    // public void setDegMotionMagic(double positionDeg) {
+    //     periodicIO.deployControlMode = ControlMode.MotionMagic;
+    //     periodicIO.deployff = this.degff.calculate(Units.degreesToRadians(positionDeg), 1.5);
+    //     // convert to set to native
+    //     periodicIO.deployDemand = positionDeg / deployPositionConversion;
+    // }
+
+    public void setDegMotionProfile(double positionDeg) {
+        profile =
+                new TrapezoidProfile(
+                        this.profileConstraints,
+                        new TrapezoidProfile.State(getDegrees(), getVelocity()),
+                        new TrapezoidProfile.State(positionDeg, 0));
+
+        var state = profile.calculate(0.02);
+        // Multiply the static friction volts by -1 if our target position is less than current
+        // position; if we need to move backwards, the volts needs to be negative
+        double ffVolts = degff.calculate(state.position, state.velocity);
+        setPosition(state.position, ffVolts);
+    }
+
+    public void setPosition(double position, double feedforward) {
+        periodicIO.deployControlMode = ControlMode.Position;
+        periodicIO.deployff = feedforward;
+        periodicIO.deployDemand = position / deployPositionConversion;
     }
 
     public void setOpenloop(double output) {
@@ -159,7 +185,7 @@ public class WristIntake implements PeriodicSubsystem {
     }
 
     public double getVelocity() {
-        return periodicIO.intakeVel;
+        return periodicIO.deployVel;
     }
 
     public void resetEncoders() {

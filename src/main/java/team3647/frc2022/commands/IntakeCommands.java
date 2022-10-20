@@ -22,6 +22,15 @@ public class IntakeCommands {
                 intake);
     }
 
+    public Command retract() {
+        return new FunctionalCommand(
+                () -> {},
+                () -> intake.retract(),
+                interrupted -> {},
+                () -> Math.abs(intake.getDegrees() - WristIntakeConstants.intakableDegree) < 1.0,
+                intake);
+    }
+
     // public Command retract() {
     //     // return new InstantCommand(intake::retract);
     // }

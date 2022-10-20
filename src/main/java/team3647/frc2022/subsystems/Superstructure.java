@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import java.util.function.DoubleSupplier;
 import team3647.frc2022.commands.ColumnCommands;
 import team3647.frc2022.commands.IntakeCommands;
+import team3647.frc2022.commands.turret.TurretCommands;
 import team3647.lib.tracking.FlightDeck;
 import team3647.lib.vision.AimingParameters;
 
@@ -18,16 +19,20 @@ public class Superstructure {
     private final FlightDeck deck;
     private final WristIntake m_intake;
     private final Column m_column;
+    private final Turret m_turret;
 
     public final IntakeCommands intakeCommands;
     public final ColumnCommands columnCommands;
+    public final TurretCommands turretCommands;
 
-    public Superstructure(FlightDeck deck, WristIntake m_intake, Column m_column) {
+    public Superstructure(FlightDeck deck, WristIntake m_intake, Column m_column, Turret m_turret) {
         this.deck = deck;
         this.m_intake = m_intake;
         this.m_column = m_column;
+        this.m_turret = m_turret;
         intakeCommands = new IntakeCommands(m_intake);
         columnCommands = new ColumnCommands(m_column);
+        turretCommands = new TurretCommands(m_turret);
     }
 
     public void periodic(double timestamp) {
@@ -66,7 +71,13 @@ public class Superstructure {
         return this.angleToTarget;
     }
 
+    public Command feed() {
+        return columnCommands.getRunInwards();
+    }
+
     public Command feederWithSensor(DoubleSupplier surfaceVelocity) {
-        return columnCommands.getGoVariableVelocity(() -> 1).until(m_column::getTopBannerValue);
+        return columnCommands
+                .getGoVariableVelocity(surfaceVelocity)
+                .until(m_column::getTopBannerValue);
     }
 }

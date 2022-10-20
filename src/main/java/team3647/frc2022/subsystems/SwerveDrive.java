@@ -189,6 +189,12 @@ public class SwerveDrive implements PeriodicSubsystem {
         // SmartDashboard.putNumber("Percent Out 3", backLeft.percentOut);
     }
 
+    @Override
+    public void periodic() {
+        readPeriodicInputs();
+        writePeriodicOutputs();
+    }
+
     // public void setAbsoluteZeros() {
     //     System.out.println(
     //             "front left Setting Zero "

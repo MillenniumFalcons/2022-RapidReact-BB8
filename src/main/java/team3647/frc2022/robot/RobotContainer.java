@@ -15,11 +15,13 @@ import team3647.frc2022.commands.SwerveDriveNoAim;
 import team3647.frc2022.constants.ColumnConstants;
 import team3647.frc2022.constants.GlobalConstants;
 import team3647.frc2022.constants.SwerveDriveConstants;
+import team3647.frc2022.constants.TurretConstants;
 import team3647.frc2022.constants.VisionConstants;
 import team3647.frc2022.constants.WristIntakeConstants;
 import team3647.frc2022.subsystems.Column;
 import team3647.frc2022.subsystems.Superstructure;
 import team3647.frc2022.subsystems.SwerveDrive;
+import team3647.frc2022.subsystems.Turret;
 import team3647.frc2022.subsystems.WristIntake;
 import team3647.frc2022.subsystems.vision.VisionController;
 import team3647.lib.GroupPrinter;
@@ -98,6 +100,9 @@ public class RobotContainer {
         //         swerveCommands.variableVelocity(this::getSwerveAngle));
         mainController.rightTrigger.whileActiveOnce(
                 m_superstructure.intakeCommands.deploy().perpetually());
+        mainController.rightBumper.whileActiveOnce(
+                m_superstructure.intakeCommands.retract().perpetually());
+        mainController.leftBumper.whileActiveOnce(m_superstructure.feed());
         // mainController.buttonX.whenHeld(new InstantCommand(m_wristIntake::increaseDemand));
         // mainController.buttonB.whenHeld(new InstantCommand(m_wristIntake::increaseFF));
     }
@@ -155,6 +160,19 @@ public class RobotContainer {
                     ColumnConstants.kNominalVoltage,
                     GlobalConstants.kDt,
                     ColumnConstants.kFeedForward);
+    final Turret m_turret =
+            new Turret(
+                    TurretConstants.kTurretMotor,
+                    TurretConstants.kFalconVelocityToDegpS,
+                    TurretConstants.kFalconPositionToDegrees,
+                    TurretConstants.kNominalVoltage,
+                    GlobalConstants.kDt,
+                    TurretConstants.kS,
+                    TurretConstants.kMaxDegree,
+                    TurretConstants.kMinDegree,
+                    TurretConstants.kStartingAngle,
+                    TurretConstants.kTurretProfile,
+                    TurretConstants.kFeedForwards);
 
     final FlightDeck m_flightDeck =
             new FlightDeck(
@@ -176,7 +194,7 @@ public class RobotContainer {
                     this::updateTapeTranslations);
 
     final Superstructure m_superstructure =
-            new Superstructure(m_flightDeck, m_wristIntake, m_column);
+            new Superstructure(m_flightDeck, m_wristIntake, m_column, m_turret);
 
     private final CommandScheduler scheduler = CommandScheduler.getInstance();
 

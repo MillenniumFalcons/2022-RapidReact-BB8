@@ -17,12 +17,10 @@ import team3647.frc2022.constants.GlobalConstants;
 import team3647.frc2022.constants.SwerveDriveConstants;
 import team3647.frc2022.constants.TurretConstants;
 import team3647.frc2022.constants.VisionConstants;
-import team3647.frc2022.constants.WristIntakeConstants;
 import team3647.frc2022.subsystems.Column;
 import team3647.frc2022.subsystems.Superstructure;
 import team3647.frc2022.subsystems.SwerveDrive;
 import team3647.frc2022.subsystems.Turret;
-import team3647.frc2022.subsystems.WristIntake;
 import team3647.frc2022.subsystems.vision.VisionController;
 import team3647.lib.GroupPrinter;
 import team3647.lib.inputs.Joysticks;
@@ -43,7 +41,7 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        scheduler.registerSubsystem(m_swerve, m_printer, m_visionController, m_wristIntake);
+        scheduler.registerSubsystem(m_swerve, m_printer, m_visionController, m_column, m_turret);
 
         // m_swerve.setDefaultCommand(
         //         new SwerveDriveTeleopBaseFalcon(
@@ -74,7 +72,6 @@ public class RobotContainer {
         configureButtonBindings();
         configureSmartDashboardLogging();
         SmartDashboard.putNumber("Swerve Angle", 0.0);
-        m_printer.addDouble("Intake Angle", () -> m_wristIntake.getDegrees());
         m_printer.addDouble("Raw Rotation", () -> m_swerve.getRawHeading());
         m_swerve.setOdometry(
                 PathPlannerTrajectories.startStateStraightNinety,
@@ -98,11 +95,6 @@ public class RobotContainer {
         // TeleopAim(swerve, new Translation2d(5.0, 5.0)));
         // mainController.buttonB.whileActiveOnce(
         //         swerveCommands.variableVelocity(this::getSwerveAngle));
-        mainController.rightTrigger.whileActiveOnce(
-                m_superstructure.intakeCommands.deploy().perpetually());
-        mainController.rightBumper.whileActiveOnce(
-                m_superstructure.intakeCommands.retract().perpetually());
-        mainController.leftBumper.whileActiveOnce(m_superstructure.feed());
         // mainController.buttonX.whenHeld(new InstantCommand(m_wristIntake::increaseDemand));
         // mainController.buttonB.whenHeld(new InstantCommand(m_wristIntake::increaseFF));
     }
@@ -136,21 +128,6 @@ public class RobotContainer {
                     SwerveDriveConstants.kBackLeftModule,
                     SwerveDriveConstants.kBackRightModule,
                     SwerveDriveConstants.kGyro);
-    public final WristIntake m_wristIntake =
-            new WristIntake(
-                    WristIntakeConstants.kDeployMotor,
-                    WristIntakeConstants.kIntakeMotor,
-                    WristIntakeConstants.kDeployFeedForward,
-                    WristIntakeConstants.kIntakeFeedForward,
-                    WristIntakeConstants.motionConstraints,
-                    GlobalConstants.kDt,
-                    WristIntakeConstants.kIntakeNativeVelToSurfaceMpS,
-                    WristIntakeConstants.kDeployNativeVelocityToDegpS,
-                    WristIntakeConstants.kDeployNativePositionToDegrees,
-                    WristIntakeConstants.kNominalVoltage,
-                    WristIntakeConstants.maxDeployVelocityDegPerSec,
-                    WristIntakeConstants.intakableDegree,
-                    WristIntakeConstants.zeroDeg);
     public final Column m_column =
             new Column(
                     ColumnConstants.kColumnMotor,
@@ -193,8 +170,7 @@ public class RobotContainer {
                     m_flightDeck::addVisionObservation,
                     this::updateTapeTranslations);
 
-    final Superstructure m_superstructure =
-            new Superstructure(m_flightDeck, m_wristIntake, m_column, m_turret);
+    final Superstructure m_superstructure = new Superstructure(m_flightDeck, m_column, m_turret);
 
     private final CommandScheduler scheduler = CommandScheduler.getInstance();
 

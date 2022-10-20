@@ -3,37 +3,14 @@ package team3647.frc2022.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import java.util.function.DoubleSupplier;
-import team3647.frc2022.constants.WristIntakeConstants;
-import team3647.frc2022.subsystems.WristIntake;
+import team3647.frc2022.subsystems.Intake;
 
 public class IntakeCommands {
-    private final WristIntake intake;
+    private final Intake intake;
 
-    public IntakeCommands(WristIntake intake) {
+    public IntakeCommands(Intake intake) {
         this.intake = intake;
     }
-
-    public Command deploy() {
-        return new FunctionalCommand(
-                () -> {},
-                () -> intake.extend(),
-                interrupted -> {},
-                () -> Math.abs(intake.getDegrees() - WristIntakeConstants.intakableDegree) < 1.0,
-                intake);
-    }
-
-    public Command retract() {
-        return new FunctionalCommand(
-                () -> {},
-                () -> intake.retract(),
-                interrupted -> {},
-                () -> Math.abs(intake.getDegrees() - WristIntakeConstants.intakableDegree) < 1.0,
-                intake);
-    }
-
-    // public Command retract() {
-    //     // return new InstantCommand(intake::retract);
-    // }
 
     public Command openLoopAndStop(double percentOut) {
         return new FunctionalCommand(
@@ -56,9 +33,5 @@ public class IntakeCommands {
                 },
                 () -> false,
                 intake);
-    }
-
-    public Command deployAndIntakeWith(Command intakingCommand) {
-        return deploy().andThen(intakingCommand);
     }
 }

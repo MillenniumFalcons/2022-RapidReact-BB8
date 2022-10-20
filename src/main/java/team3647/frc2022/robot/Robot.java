@@ -48,7 +48,6 @@ public class Robot extends TimedRobot {
         // autonomous chooser on the dashboard.
         m_robotContainer = new RobotContainer();
         m_robotContainer.m_swerve.resetModuleAngle();
-        m_robotContainer.m_wristIntake.resetEncoders();
     }
 
     /**

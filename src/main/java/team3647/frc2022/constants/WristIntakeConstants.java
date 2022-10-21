@@ -31,8 +31,8 @@ public class WristIntakeConstants {
     public static final SimpleMotorFeedforward kIntakeFeedForward =
             new SimpleMotorFeedforward(kIntakeS, kIntakeV, kIntakeA);
 
-    public static final double kDeployS = 2.0;
-    public static final double kDeployCos = 2.0;
+    public static final double kDeployS = 1.0868;
+    public static final double kDeployCos = 0.4;
 
     public static final boolean kCurrentLimitingEnable = false;
     public static final double kStallCurrent = 10.0;
@@ -75,7 +75,7 @@ public class WristIntakeConstants {
         kIntakeMotorConfig.slot0.kD = 0;
         kIntakeMotorConfig.slot0.kF = 0;
 
-        kDeployMotorConfig.slot0.kP = 0.1;
+        kDeployMotorConfig.slot0.kP = 0.15;
         kDeployMotorConfig.slot0.kI = 0;
         kDeployMotorConfig.slot0.kD = 0;
 
@@ -94,6 +94,7 @@ public class WristIntakeConstants {
         kDeployMotor.setInverted(kDeployMotorInverted);
 
         kIntakeMotor.enableVoltageCompensation(true);
+        kDeployMotor.enableVoltageCompensation(true);
     }
 
     private WristIntakeConstants() {}

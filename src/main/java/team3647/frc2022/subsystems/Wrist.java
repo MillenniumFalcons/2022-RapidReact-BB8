@@ -66,6 +66,7 @@ public class Wrist extends TalonFXSubsystem {
     public void writePeriodicOutputs() {
         super.writePeriodicOutputs();
         SmartDashboard.putNumber("Wrist Intake Deg", super.getPosition());
+        SmartDashboard.putNumber("Wrist Intake Demand", super.getDemand());
     }
 
     @Override

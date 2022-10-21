@@ -72,7 +72,6 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // reset heading
         mainController.buttonA.whenPressed(() -> m_swerve.zeroHeading());
-        mainController.rightTrigger.whileActiveOnce(m_superstructure.deployAndRunIntake(() -> 2));
         mainController
                 .buttonY
                 .whileActiveOnce(m_superstructure.batterAccelerateAndShoot())
@@ -83,10 +82,7 @@ public class RobotContainer {
                                 .motionMagic(HoodContants.kBatterAngle)
                                 .perpetually());
 
-        coController
-                .rightBumper
-                .whileActiveOnce(m_superstructure.deployAndRunIntake(() -> 5))
-                .whileActiveOnce(m_superstructure.feederWithSensor(() -> 3));
+        mainController.rightBumper.whileActiveOnce(m_superstructure.deployIntake());
     }
 
     private void configureDefaultCommands() {
@@ -124,7 +120,6 @@ public class RobotContainer {
     }
 
     public void configureSmartDashboardLogging() {
-        SmartDashboard.putNumber("Wrist Intake Pos", 0.0);
         SmartDashboard.putNumber("Swerve Angle", 0.0);
         m_printer.addDouble("Raw Rotation", () -> m_swerve.getRawHeading());
         m_printer.addPose("Robot", m_swerve::getPose);

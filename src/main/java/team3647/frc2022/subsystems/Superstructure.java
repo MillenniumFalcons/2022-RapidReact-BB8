@@ -119,8 +119,8 @@ public class Superstructure {
     }
 
     public Command deployAndRunIntake(DoubleSupplier surfaceVelocity) {
-        // return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(surfaceVelocity));
-        return intakeCommands.runClosedLoop(surfaceVelocity);
+        return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(surfaceVelocity));
+        // return intakeCommands.runClosedLoop(surfaceVelocity);
     }
 
     // for testing only

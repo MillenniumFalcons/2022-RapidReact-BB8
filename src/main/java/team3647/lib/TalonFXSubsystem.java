@@ -179,6 +179,10 @@ public abstract class TalonFXSubsystem implements PeriodicSubsystem {
         return periodicIO.position;
     }
 
+    public double getDemand() {
+        return periodicIO.demand * positionConversion;
+    }
+
     /** @return the timestamp for the position and velocity measurements */
     public double getTimestamp() {
         return periodicIO.timestamp;

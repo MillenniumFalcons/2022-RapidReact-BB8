@@ -2,6 +2,7 @@ package team3647.frc2022.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.TalonFXSubsystem;
 
 public class Hood extends TalonFXSubsystem {
@@ -45,6 +46,12 @@ public class Hood extends TalonFXSubsystem {
     public void setAngle(double angle) {
         super.setPosition(
                 MathUtil.clamp(angle, minPosDeg + posThresholdDeg, maxPosDeg - posThresholdDeg), 0);
+    }
+
+    @Override
+    public void writePeriodicOutputs() {
+        super.writePeriodicOutputs();
+        SmartDashboard.putNumber("hood deg", getPosition());
     }
 
     public double getAngle() {

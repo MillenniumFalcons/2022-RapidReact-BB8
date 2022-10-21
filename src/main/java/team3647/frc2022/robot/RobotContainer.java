@@ -82,6 +82,11 @@ public class RobotContainer {
                                 .hoodCommands
                                 .motionMagic(HoodContants.kBatterAngle)
                                 .perpetually());
+
+        coController
+                .rightBumper
+                .whileActiveOnce(m_superstructure.deployAndRunIntake(() -> 5))
+                .whileActiveOnce(m_superstructure.feederWithSensor(() -> 3));
     }
 
     private void configureDefaultCommands() {

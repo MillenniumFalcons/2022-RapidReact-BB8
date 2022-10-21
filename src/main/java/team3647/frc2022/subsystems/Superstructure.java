@@ -119,7 +119,8 @@ public class Superstructure {
     }
 
     public Command deployAndRunIntake(DoubleSupplier surfaceVelocity) {
-        return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(surfaceVelocity));
+        // return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(surfaceVelocity));
+        return intakeCommands.runClosedLoop(surfaceVelocity);
     }
 
     // for testing only
@@ -179,7 +180,7 @@ public class Superstructure {
             DoubleSupplier kickerVelocity,
             BooleanSupplier readyToShoot,
             double delayAfterDrivetrainStops) {
-        DoubleSupplier topSpeed = () -> 0.8;
+        DoubleSupplier topSpeed = kickerVelocity;
 
         return CommandGroupBase.parallel(
                 flywheelCommands.variableVelocity(flywheelVelocity),

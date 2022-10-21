@@ -48,6 +48,7 @@ public class Column extends TalonFXSubsystem {
     public void writePeriodicOutputs() {
         super.writePeriodicOutputs();
         SmartDashboard.putNumber("Column", getVelocity());
+        SmartDashboard.putBoolean("top sensor val", getTopBannerValue());
     }
     /** @return topbannerValue returns false when no ball, returns true when ball */
     public boolean getTopBannerValue() {

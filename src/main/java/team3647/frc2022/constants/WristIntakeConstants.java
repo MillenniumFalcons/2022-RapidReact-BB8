@@ -12,7 +12,7 @@ import team3647.lib.drivers.LazyTalonFX;
 
 /** Add your docs here. */
 public class WristIntakeConstants {
-    public static final InvertType kIntakeMotorInverted = InvertType.InvertMotorOutput;
+    public static final InvertType kIntakeMotorInverted = InvertType.None;
     public static final InvertType kDeployMotorInverted = InvertType.None;
     public static final TalonFXConfiguration kIntakeMotorConfig = new TalonFXConfiguration();
     public static final TalonFXConfiguration kDeployMotorConfig = new TalonFXConfiguration();
@@ -22,8 +22,8 @@ public class WristIntakeConstants {
 
     public static final double kPosThersholdDeg = 0.5;
     // tweak these constants and zeroing
-    public static final double kMaxDegree = 0.0;
-    public static final double kMinDegree = 0.0;
+    public static final double kMaxDegree = 275;
+    public static final double kMinDegree = 90;
 
     public static final double kIntakeS = 0.75412;
     public static final double kIntakeV = 0.72691;
@@ -31,8 +31,8 @@ public class WristIntakeConstants {
     public static final SimpleMotorFeedforward kIntakeFeedForward =
             new SimpleMotorFeedforward(kIntakeS, kIntakeV, kIntakeA);
 
-    public static final double kDeployS = 0.8;
-    public static final double kDeployCos = 1.3;
+    public static final double kDeployS = 2.0;
+    public static final double kDeployCos = 2.0;
 
     public static final boolean kCurrentLimitingEnable = false;
     public static final double kStallCurrent = 10.0;
@@ -48,8 +48,8 @@ public class WristIntakeConstants {
     public static final double kDeployGearboxReduction = 1.0 / 35.0;
     public static final double kIntakeGearboxReduction = 1.0 / 5.33;
 
-    public static final double kDeployMaxVelocityDegPs = 10;
-    public static final double kDeployMaxAccelerationDegPss = 10;
+    public static final double kDeployMaxVelocityDegPs = 20;
+    public static final double kDeployMaxAccelerationDegPss = 20;
 
     // deploy speed
     public static final double kFalconPositionToDegrees = kDeployGearboxReduction / 2048.0 * 360;

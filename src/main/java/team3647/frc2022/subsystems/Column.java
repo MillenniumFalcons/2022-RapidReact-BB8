@@ -7,6 +7,7 @@ package team3647.frc2022.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.TalonFXSubsystem;
 
 /** Add your docs here. */
@@ -41,6 +42,12 @@ public class Column extends TalonFXSubsystem {
     public void readPeriodicInputs() {
         super.readPeriodicInputs();
         topBannerValue = topBanner.get();
+    }
+
+    @Override
+    public void writePeriodicOutputs() {
+        super.writePeriodicOutputs();
+        SmartDashboard.putNumber("Column", getVelocity());
     }
     /** @return topbannerValue returns false when no ball, returns true when ball */
     public boolean getTopBannerValue() {

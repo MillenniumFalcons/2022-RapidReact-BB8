@@ -11,14 +11,14 @@ import team3647.lib.drivers.LazyTalonFX;
 public final class ColumnConstants {
     public static final TalonFXInvertType kMasterInverted = TalonFXInvertType.Clockwise;
     public static final TalonFXConfiguration kMasterConfig = new TalonFXConfiguration();
-    public static final double kS = 0.89015;
-    public static final double kV = 1;
-    public static final double kA = 0.026327;
+    public static final double kS = 0.885;
+    public static final double kV = 2.05;
+    public static final double kA = 0.049;
     public static final SimpleMotorFeedforward kFeedForward =
             new SimpleMotorFeedforward(kS, kV, kA);
 
     public static final double kNominalVoltage = 12.0;
-    public static final double kGearboxReduction = 24 / 31.0;
+    public static final double kGearboxReduction = 3.0;
 
     public static final double kWheelDiameterMeters = Units.inchesToMeters(2);
     public static final double kWheelRotationMeters = kWheelDiameterMeters * Math.PI;
@@ -37,7 +37,7 @@ public final class ColumnConstants {
     public static final double kLowGoalVelocity = 3;
 
     static {
-        kMasterConfig.slot0.kP = 0.1;
+        kMasterConfig.slot0.kP = 0.02;
         kMasterConfig.slot0.kI = 0;
         kMasterConfig.slot0.kD = 0;
         kMasterConfig.slot0.kF = 0;
@@ -45,5 +45,6 @@ public final class ColumnConstants {
         kMasterConfig.voltageCompSaturation = kNominalVoltage;
 
         kColumnMotor.configAllSettings(kMasterConfig, GlobalConstants.kTimeoutMS);
+        kColumnMotor.setInverted(kMasterInverted);
     }
 }

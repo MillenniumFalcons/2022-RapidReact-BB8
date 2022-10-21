@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.FollowerType;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.TalonFXSubsystem;
 
 public class Flywheel extends TalonFXSubsystem {
@@ -27,6 +28,12 @@ public class Flywheel extends TalonFXSubsystem {
     /** @param vel velocity in m/s, positive is outside (to shoot) */
     public void setSurfaceSpeed(double vel) {
         setVelocity(vel, ff.calculate(vel));
+    }
+
+    @Override
+    public void writePeriodicOutputs() {
+        super.writePeriodicOutputs();
+        SmartDashboard.putNumber("velocity", getVelocity());
     }
 
     @Override

@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrame;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -66,7 +65,6 @@ public abstract class TalonFXSubsystem implements PeriodicSubsystem {
 
     @Override
     public void writePeriodicOutputs() {
-        SmartDashboard.putNumber("Turret Angle", periodicIO.position);
         master.set(
                 periodicIO.controlMode,
                 periodicIO.demand,

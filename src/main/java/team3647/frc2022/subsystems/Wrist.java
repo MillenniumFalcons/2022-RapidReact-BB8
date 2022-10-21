@@ -2,6 +2,7 @@ package team3647.frc2022.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.TalonFXSubsystem;
 
 public class Wrist extends TalonFXSubsystem {
@@ -59,6 +60,12 @@ public class Wrist extends TalonFXSubsystem {
 
     public double getAngle() {
         return super.getPosition();
+    }
+
+    @Override
+    public void writePeriodicOutputs() {
+        super.writePeriodicOutputs();
+        SmartDashboard.putNumber("Wrist Intake Deg", super.getPosition());
     }
 
     @Override

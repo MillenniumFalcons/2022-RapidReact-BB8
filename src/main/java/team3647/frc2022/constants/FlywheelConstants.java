@@ -12,7 +12,7 @@ import team3647.lib.team254.util.InterpolatingTreeMap;
 
 public final class FlywheelConstants {
 
-    public static final TalonFXInvertType kMasterInverted = TalonFXInvertType.Clockwise;
+    public static final TalonFXInvertType kMasterInverted = TalonFXInvertType.CounterClockwise;
     public static final TalonFXConfiguration kMasterConfig = new TalonFXConfiguration();
 
     public static final boolean kCurrentLimitingEnable = true;

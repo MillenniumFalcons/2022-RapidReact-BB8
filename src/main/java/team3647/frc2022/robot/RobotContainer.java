@@ -44,7 +44,7 @@ import team3647.lib.vision.MultiTargetTracker;
  */
 public class RobotContainer {
     private final Joysticks mainController = new Joysticks(0);
-    private final Joysticks coController = new Joysticks(0);
+    private final Joysticks coController = new Joysticks(1);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -72,7 +72,16 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // reset heading
         mainController.buttonA.whenPressed(() -> m_swerve.zeroHeading());
-        mainController.rightTrigger.whileActiveOnce(m_superstructure.wristCommands.deploy());
+        mainController.rightTrigger.whileActiveOnce(m_superstructure.deployAndRunIntake(() -> 2));
+        mainController
+                .buttonY
+                .whileActiveOnce(m_superstructure.batterAccelerateAndShoot())
+                .whileActiveOnce(m_superstructure.turretCommands.motionMagic(0).perpetually())
+                .whileActiveOnce(
+                        m_superstructure
+                                .hoodCommands
+                                .motionMagic(HoodContants.kBatterAngle)
+                                .perpetually());
     }
 
     private void configureDefaultCommands() {

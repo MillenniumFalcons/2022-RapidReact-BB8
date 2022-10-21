@@ -18,6 +18,7 @@ import team3647.frc2022.commands.HoodCommands;
 import team3647.frc2022.commands.IntakeCommands;
 import team3647.frc2022.commands.WristCommands;
 import team3647.frc2022.commands.turret.TurretCommands;
+import team3647.frc2022.constants.ColumnConstants;
 import team3647.frc2022.constants.FlywheelConstants;
 import team3647.frc2022.constants.HoodContants;
 import team3647.frc2022.constants.TurretConstants;
@@ -131,6 +132,35 @@ public class Superstructure {
         return hoodCommands.motionMagic(35);
     }
 
+    public boolean getFlywheelReady(DoubleSupplier expectedVelocity, double threshold) {
+        return Math.abs(m_flywheel.getVelocity() - expectedVelocity.getAsDouble()) < threshold;
+    }
+
+    public boolean ballWentThrough(
+            DoubleSupplier flywheel, DoubleSupplier kicker, double threshold) {
+        return m_flywheel.getVelocity() + threshold < flywheel.getAsDouble();
+    }
+
+    public boolean readyToBatter() {
+        return getFlywheelReady(this::getBatterVelocity, 2)
+                && Math.abs(m_hood.getAngle() - HoodContants.kBatterAngle) < 1
+                && Math.abs(m_flywheel.getVelocity()) > 5;
+    }
+
+    public boolean batterBallWentThrough() {
+        return ballWentThrough(this::getBatterVelocity, () -> ColumnConstants.kBatterVelocity, 1);
+    }
+
+    public Command batterAccelerateAndShoot() {
+        return new WaitUntilCommand(() -> Math.abs(m_turret.getAngle()) < 3)
+                .andThen(
+                        fastAccelerateAndShoot(
+                                this::getBatterVelocity,
+                                () -> ColumnConstants.kBatterVelocity,
+                                this::readyToBatter,
+                                0));
+    }
+
     public Command fastAutoAccelerateAndShoot() {
         return fastAutoAccelerateAndShoot(5, 0, 0);
     }
@@ -141,7 +171,6 @@ public class Superstructure {
                 this::getAimedFlywheelSurfaceVel,
                 this::getAimedKickerVelocity,
                 this::readyToAutoShoot,
-                feederSpeed,
                 0);
     }
 
@@ -149,7 +178,6 @@ public class Superstructure {
             DoubleSupplier flywheelVelocity,
             DoubleSupplier kickerVelocity,
             BooleanSupplier readyToShoot,
-            double feederSpeed,
             double delayAfterDrivetrainStops) {
         DoubleSupplier topSpeed = () -> 0.8;
 
@@ -182,6 +210,10 @@ public class Superstructure {
                 && Math.abs(m_hood.getAngle() - getAimedHoodAngle()) < 1
                 && Math.abs(m_flywheel.getVelocity()) > 5
                 && Math.abs(getAngleToTarget()) < 1;
+    }
+
+    public double getBatterVelocity() {
+        return FlywheelConstants.kBatterVelocity;
     }
 
     public double getAimedHoodAngle() {

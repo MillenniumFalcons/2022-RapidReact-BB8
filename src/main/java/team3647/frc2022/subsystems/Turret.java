@@ -6,6 +6,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.TalonFXSubsystem;
 
 public class Turret extends TalonFXSubsystem {
@@ -93,6 +94,7 @@ public class Turret extends TalonFXSubsystem {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Turret Pos", getPosition());
         readPeriodicInputs();
         writePeriodicOutputs();
     }

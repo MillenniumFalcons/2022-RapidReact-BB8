@@ -153,7 +153,7 @@ public class Superstructure {
     }
 
     public boolean batterBallWentThrough() {
-        return ballWentThrough(this::getBatterVelocity, () -> ColumnConstants.kBatterVelocity, 1);
+        return ballWentThrough(this::getBatterVelocity, () -> ColumnConstants.kShootVelocity, 1);
     }
 
     public Command batterAccelerateAndShoot() {
@@ -161,7 +161,7 @@ public class Superstructure {
                 .andThen(
                         fastAccelerateAndShoot(
                                 this::getBatterVelocity,
-                                () -> ColumnConstants.kBatterVelocity,
+                                () -> ColumnConstants.kShootVelocity,
                                 this::readyToBatter,
                                 0));
     }

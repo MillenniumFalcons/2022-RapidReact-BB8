@@ -137,6 +137,16 @@ public class RobotContainer {
                     }
                     return aimingParams.getFieldToGoal();
                 });
+        SmartDashboard.putNumber("Hood Angle", 16.0);
+        SmartDashboard.putNumber("Shooter Velocity", 5.0);
+    }
+
+    public double getShooterDashboard() {
+        return SmartDashboard.getNumber("Shooter Velocity", 5.0);
+    }
+
+    public double getHoodDashboard() {
+        return SmartDashboard.getNumber("Hood Angle", 16.0);
     }
 
     public Command getAutonomousCommand() {

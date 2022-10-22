@@ -1,7 +1,6 @@
 package team3647.frc2022.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.lib.TalonFXSubsystem;
 
@@ -51,11 +50,12 @@ public class Wrist extends TalonFXSubsystem {
 
     public void setAngleMotionMagic(double angle) {
         double multiplier = Math.signum(angle - getAngle());
-        double gravityVoltage = Math.cos(Math.toRadians(angle - minPosDeg)) * kCos;
+        // double gravityVoltage = Math.cos(Math.toRadians(angle - minPosDeg)) * kCos;
 
-        super.setPositionMotionMagic(
-                MathUtil.clamp(angle, minPosDeg + posThresholdDeg, maxPosDeg - posThresholdDeg),
-                kS * multiplier + gravityVoltage);
+        // super.setPositionMotionMagic(
+        //         MathUtil.clamp(angle, minPosDeg + posThresholdDeg, maxPosDeg - posThresholdDeg),
+        //         kS * multiplier + gravityVoltage);
+        super.setPositionMotionMagic(angle, multiplier * (-kS));
     }
 
     public double getAngle() {

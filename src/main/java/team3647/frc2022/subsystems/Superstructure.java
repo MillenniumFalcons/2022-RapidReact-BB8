@@ -123,6 +123,10 @@ public class Superstructure {
         // return intakeCommands.runClosedLoop(surfaceVelocity);
     }
 
+    public Command retractIntake() {
+        return wristCommands.retract();
+    }
+
     // for testing only
     public Command deployIntake() {
         return wristCommands.deploy();

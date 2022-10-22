@@ -17,15 +17,15 @@ public class WristIntakeConstants {
     public static final TalonFXConfiguration kIntakeMotorConfig = new TalonFXConfiguration();
     public static final TalonFXConfiguration kDeployMotorConfig = new TalonFXConfiguration();
 
-    public static final double intakableDegree = 60.0;
-    public static final double zeroDeg = 0.0;
+    public static final double intakableDegree = 155.0;
+    public static final double zeroDeg = 30.0;
 
     public static final double kPosThersholdDeg = 0.5;
     // tweak these constants and zeroing
     public static final double kMaxDegree = 275;
     public static final double kMinDegree = 90;
 
-    public static final double kIntakeS = 0.75412;
+    public static final double kIntakeS = 2; // 0.75412;
     public static final double kIntakeV = 0.72691;
     public static final double kIntakeA = 0.020019;
     public static final SimpleMotorFeedforward kIntakeFeedForward =
@@ -48,8 +48,8 @@ public class WristIntakeConstants {
     public static final double kDeployGearboxReduction = 1.0 / 35.0;
     public static final double kIntakeGearboxReduction = 1.0 / 5.33;
 
-    public static final double kDeployMaxVelocityDegPs = 20;
-    public static final double kDeployMaxAccelerationDegPss = 20;
+    public static final double kDeployMaxVelocityDegPs = 45;
+    public static final double kDeployMaxAccelerationDegPss = 45;
 
     // deploy speed
     public static final double kFalconPositionToDegrees = kDeployGearboxReduction / 2048.0 * 360;
@@ -75,18 +75,18 @@ public class WristIntakeConstants {
         kIntakeMotorConfig.slot0.kD = 0;
         kIntakeMotorConfig.slot0.kF = 0;
 
-        kDeployMotorConfig.slot0.kP = 0.15;
-        kDeployMotorConfig.slot0.kI = 0;
-        kDeployMotorConfig.slot0.kD = 0;
+        kDeployMotorConfig.slot0.kP = 0.1;
+        kDeployMotorConfig.slot0.kI = 0.0;
+        kDeployMotorConfig.slot0.kD = 0.05;
 
         kIntakeMotorConfig.voltageCompSaturation = kNominalVoltage;
         kDeployMotorConfig.voltageCompSaturation = kNominalVoltage;
         kDeployMotorConfig.supplyCurrLimit.enable = kCurrentLimitingEnable;
         kDeployMotorConfig.supplyCurrLimit.currentLimit = kStallCurrent;
 
-        kDeployMotorConfig.motionAcceleration = kDeployMaxAccelerationTicks;
+        kDeployMotorConfig.motionAcceleration = 21000;
         // in native units/100ms
-        kDeployMotorConfig.motionCruiseVelocity = kDeployMaxVelocityTicks;
+        kDeployMotorConfig.motionCruiseVelocity = 21000;
 
         kIntakeMotor.configAllSettings(kIntakeMotorConfig, GlobalConstants.kTimeoutMS);
         kDeployMotor.configAllSettings(kDeployMotorConfig, GlobalConstants.kTimeoutMS);

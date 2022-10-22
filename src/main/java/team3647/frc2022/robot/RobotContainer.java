@@ -82,7 +82,12 @@ public class RobotContainer {
                                 .motionMagic(HoodContants.kBatterAngle)
                                 .perpetually());
 
-        mainController.rightBumper.whileActiveOnce(m_superstructure.deployIntake());
+        coController.rightTrigger.whileActiveOnce(
+                m_superstructure
+                        .deployAndRunIntake(() -> 5)
+                        .alongWith(m_superstructure.feederWithSensor(() -> 3)));
+
+        coController.rightTrigger.whenInactive(m_superstructure.retractIntake());
     }
 
     private void configureDefaultCommands() {

@@ -81,6 +81,7 @@ public class RobotContainer {
                                 .hoodCommands
                                 .motionMagic(HoodContants.kBatterAngle)
                                 .perpetually());
+        mainController.leftTrigger.whileActiveOnce(m_superstructure.aimTurret());
 
         coController.rightTrigger.whileActiveOnce(
                 m_superstructure
@@ -121,12 +122,14 @@ public class RobotContainer {
                 m_superstructure.flywheelCommands.waitToSpinDownThenHold(
                         m_superstructure::getHoldVelocity));
         m_turret.setDefaultCommand(m_superstructure.turretCommands.holdPositionAtCall());
+        m_turret.setDefaultCommand(m_superstructure.wristCommands.holdPositionAtCall());
         m_column.setDefaultCommand(m_superstructure.feederManual(coController::getLeftStickY));
     }
 
     public void configureSmartDashboardLogging() {
         SmartDashboard.putNumber("Swerve Angle", 0.0);
         m_printer.addDouble("Raw Rotation", () -> m_swerve.getRawHeading());
+        m_printer.addDouble("Turret go To", () -> m_superstructure.getAimedTurretSetpoint());
         m_printer.addPose("Robot", m_swerve::getPose);
         m_printer.addPose(
                 "Vision Pose",
@@ -246,13 +249,13 @@ public class RobotContainer {
             new FlightDeck(
                     new RobotTracker(
                             1.0,
-                            VisionConstants.kRobotToTurretFixed,
+                            TurretConstants.kRobotToTurretFixed,
                             m_swerve::getPose,
                             m_swerve::getTimestamp,
-                            () -> new Rotation2d(),
+                            m_turret::getRotation,
                             m_swerve::getTimestamp),
                     new MultiTargetTracker(),
-                    VisionConstants.kTurretToCamFixed);
+                    TurretConstants.kTurretToCamFixed);
 
     final VisionController m_visionController =
             new VisionController(

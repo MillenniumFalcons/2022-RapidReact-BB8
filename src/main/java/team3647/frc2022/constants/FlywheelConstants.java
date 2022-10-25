@@ -42,30 +42,15 @@ public final class FlywheelConstants {
     private static final double kFarOffset = -0.4;
 
     public static final double[][] kFlywheelMap2 = {
-        {Units.feetToMeters(4) + GlobalConstants.kCenterOffsetMeters, 9},
-        // {Units.feetToMeters(4.5) + GlobalConstants.kCenterOffsetMeters, 9.2},
-        {Units.feetToMeters(5) + GlobalConstants.kCenterOffsetMeters, 8.3 + kOffset},
-        {Units.feetToMeters(5.5) + GlobalConstants.kCenterOffsetMeters, 8.6 + kOffset},
-        {Units.feetToMeters(6) + GlobalConstants.kCenterOffsetMeters, 9.1 + kOffset},
-        {Units.feetToMeters(6.5) + GlobalConstants.kCenterOffsetMeters, 9.2 + kOffset},
-        {Units.feetToMeters(7) + GlobalConstants.kCenterOffsetMeters, 9.25 + kOffset},
-        {Units.feetToMeters(7.5) + GlobalConstants.kCenterOffsetMeters, 9.4 + kOffset},
-        {Units.feetToMeters(8) + GlobalConstants.kCenterOffsetMeters, 9.5 + kOffset},
-        {Units.feetToMeters(8.5) + GlobalConstants.kCenterOffsetMeters, 9.79 + kOffset},
-        {Units.feetToMeters(9) + GlobalConstants.kCenterOffsetMeters, 9.9 + kOffset},
-        {Units.feetToMeters(9.5) + GlobalConstants.kCenterOffsetMeters, 10.1 + kOffset},
-        {Units.feetToMeters(10) + GlobalConstants.kCenterOffsetMeters, 10.3 + kOffset},
-        {Units.feetToMeters(10.5) + GlobalConstants.kCenterOffsetMeters, 10.5 + kOffset},
-        {Units.feetToMeters(11) + GlobalConstants.kCenterOffsetMeters, 10.6},
-        {Units.feetToMeters(11.5) + GlobalConstants.kCenterOffsetMeters, 11.1},
-        {Units.feetToMeters(12) + GlobalConstants.kCenterOffsetMeters, 11.3 + kFarOffset},
-        {Units.feetToMeters(12.5) + GlobalConstants.kCenterOffsetMeters, 11.6 + kFarOffset},
-        {Units.feetToMeters(14) + GlobalConstants.kCenterOffsetMeters, 12.8 + kFarOffset},
-        {Units.feetToMeters(16) + GlobalConstants.kCenterOffsetMeters, 13.2 + kFarOffset},
-        {Units.feetToMeters(18) + GlobalConstants.kCenterOffsetMeters, 13.8 + kFarOffset},
-        {Units.feetToMeters(20) + GlobalConstants.kCenterOffsetMeters, 14.3 + kFarOffset},
-        {Units.feetToMeters(22) + GlobalConstants.kCenterOffsetMeters, 15.5 + kFarOffset},
-        {Units.feetToMeters(24) + GlobalConstants.kCenterOffsetMeters, 16.7 + kFarOffset},
+        {Units.feetToMeters(2) + GlobalConstants.kCenterOffsetMeters, 12.5},
+        {Units.feetToMeters(4) + GlobalConstants.kCenterOffsetMeters, 13.0 + kOffset},
+        {Units.feetToMeters(6) + GlobalConstants.kCenterOffsetMeters, 14.5 + kOffset},
+        {Units.feetToMeters(8) + GlobalConstants.kCenterOffsetMeters, 14.76 + kOffset},
+        {Units.feetToMeters(10) + GlobalConstants.kCenterOffsetMeters, 15.2 + kOffset},
+        {Units.feetToMeters(12) + GlobalConstants.kCenterOffsetMeters, 16.0 + kOffset},
+        {Units.feetToMeters(14) + GlobalConstants.kCenterOffsetMeters, 17.0 + kOffset},
+        {Units.feetToMeters(16) + GlobalConstants.kCenterOffsetMeters, 18.6 + kOffset},
+        {Units.feetToMeters(18) + GlobalConstants.kCenterOffsetMeters, 21.0 + kOffset}
     };
 
     public static final double[][] kFlywheelVoltageMap = {

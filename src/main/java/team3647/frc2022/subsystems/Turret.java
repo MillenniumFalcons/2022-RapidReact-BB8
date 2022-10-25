@@ -56,6 +56,12 @@ public class Turret extends TalonFXSubsystem {
         } else if (angle > maxAngle) {
             angle -= 360;
         }
+        if (angle > maxAngle) {
+            angle = maxAngle;
+        }
+        if (angle < minAngle) {
+            angle = minAngle;
+        }
         profile =
                 new TrapezoidProfile(
                         this.profileContraints,

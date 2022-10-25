@@ -70,9 +70,11 @@ public class RobotContainer {
     }
 
     private void configureButtonBindings() {
+        // main controller
         // reset heading
         mainController.buttonA.whenPressed(() -> m_swerve.zeroHeading());
-        mainController
+
+        coController
                 .buttonY
                 .whileActiveOnce(m_superstructure.batterAccelerateAndShoot())
                 .whileActiveOnce(m_superstructure.turretCommands.motionMagic(0).perpetually())
@@ -81,14 +83,19 @@ public class RobotContainer {
                                 .hoodCommands
                                 .motionMagic(HoodContants.kBatterAngle)
                                 .perpetually());
-        mainController.leftTrigger.whileActiveOnce(m_superstructure.aimTurret());
 
-        coController.rightTrigger.whileActiveOnce(
+        // co controller
+        coController.leftTrigger.whileActiveOnce(
                 m_superstructure
                         .deployAndRunIntake(() -> 5)
                         .alongWith(m_superstructure.feederWithSensor(() -> 3)));
 
-        coController.rightTrigger.whenInactive(m_superstructure.retractIntake());
+        coController.leftTrigger.whenInactive(m_superstructure.retractIntake());
+
+        coController
+                .rightTrigger
+                .whileActiveOnce(m_superstructure.aimTurret())
+                .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot());
     }
 
     private void configureDefaultCommands() {
@@ -118,11 +125,13 @@ public class RobotContainer {
                         mainController::getRightStickX,
                         // () -> new Pose2d(),
                         () -> true));
+        m_hood.setDefaultCommand(
+                m_superstructure.hoodCommands.autoAdjustAngle(m_superstructure::getAimedHoodAngle));
         m_flywheel.setDefaultCommand(
                 m_superstructure.flywheelCommands.waitToSpinDownThenHold(
                         m_superstructure::getHoldVelocity));
         m_turret.setDefaultCommand(m_superstructure.turretCommands.holdPositionAtCall());
-        m_turret.setDefaultCommand(m_superstructure.wristCommands.holdPositionAtCall());
+        // m_wrist.setDefaultCommand(m_superstructure.wristCommands.holdPositionAtCall());
         m_column.setDefaultCommand(m_superstructure.feederManual(coController::getLeftStickY));
     }
 
@@ -131,6 +140,7 @@ public class RobotContainer {
         m_printer.addDouble("Raw Rotation", () -> m_swerve.getRawHeading());
         m_printer.addDouble("Turret go To", () -> m_superstructure.getAimedTurretSetpoint());
         m_printer.addPose("Robot", m_swerve::getPose);
+        m_printer.addDouble("Aimed Velkocity", () -> m_superstructure.getAimedFlywheelSurfaceVel());
         m_printer.addPose(
                 "Vision Pose",
                 () -> {

@@ -192,7 +192,6 @@ public class Superstructure {
             DoubleSupplier kickerVelocity,
             BooleanSupplier readyToShoot,
             double delayAfterDrivetrainStops) {
-        DoubleSupplier topSpeed = kickerVelocity;
 
         return CommandGroupBase.parallel(
                 flywheelCommands.variableVelocity(flywheelVelocity),
@@ -204,7 +203,7 @@ public class Superstructure {
                                 drivetrainStopped),
                         new WaitUntilCommand(readyToShoot),
                         columnCommands
-                                .getGoVariableVelocity(topSpeed)
+                                .getGoVariableVelocity(kickerVelocity)
                                 .alongWith(intakeCommands.openLoopAndStop(0.3))));
     }
 
@@ -249,4 +248,17 @@ public class Superstructure {
                 },
                 m_column);
     }
+
+    // public Command rejectBallTop() {
+    //     return CommandGroupBase.sequence(
+    //                     turretCommands.motionMagic(-30, 5),
+    //                     CommandGroupBase.parallel(
+    //                             flywheelCommands.openloop(0.3),
+    //                             feederWithSensor(() -> 3).withTimeout(0.5)),
+    //                     CommandGroupBase.parallel(
+    //                                     flywheelCommands.openloop(0.3),
+    //                                     columnCommands.getRunInwards())
+    //                             .withTimeout(0.7))
+    //             .withTimeout(2);
+    // }
 }

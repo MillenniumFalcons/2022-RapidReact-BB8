@@ -117,7 +117,7 @@ public final class FlywheelConstants {
     public static double constantVelocityMpS = 5;
 
     static {
-        kMasterConfig.slot0.kP = 0.05; // 0.14
+        kMasterConfig.slot0.kP = 0.08; // 0.05;
         kMasterConfig.slot0.kI = 0;
         kMasterConfig.slot0.kD = 0; // 0.08;
         kMasterConfig.slot0.kF = 0;

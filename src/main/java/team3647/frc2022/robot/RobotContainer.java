@@ -136,14 +136,12 @@ public class RobotContainer {
                         mainController::getRightStickX,
                         // () -> new Pose2d(),
                         () -> true));
-        // m_hood.setDefaultCommand(
-        //
-        // m_superstructure.hoodCommands.autoAdjustAngle(m_superstructure::getAimedHoodAngle));
-        // m_flywheel.setDefaultCommand(
-        //         m_superstructure.flywheelCommands.waitToSpinDownThenHold(
-        //                 m_superstructure::getHoldVelocity));
+        m_hood.setDefaultCommand(
+                m_superstructure.hoodCommands.autoAdjustAngle(m_superstructure::getAimedHoodAngle));
+        m_flywheel.setDefaultCommand(
+                m_superstructure.flywheelCommands.waitToSpinDownThenHold(
+                        m_superstructure::getHoldVelocity));
         m_turret.setDefaultCommand(m_superstructure.turretCommands.holdPositionAtCall());
-        // m_wrist.setDefaultCommand(m_superstructure.wristCommands.holdPositionAtCall());
         m_column.setDefaultCommand(m_superstructure.feederManual(coController::getLeftStickY));
     }
 
@@ -151,6 +149,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Swerve Angle", 0.0);
         m_printer.addDouble("Raw Rotation", () -> m_swerve.getRawHeading());
         m_printer.addDouble("Turret go To", () -> m_superstructure.getAimedTurretSetpoint());
+        m_printer.addDouble("Hood go To", () -> m_superstructure.getAimedHoodAngle());
         m_printer.addPose("Robot", m_swerve::getPose);
         m_printer.addDouble("Aimed Velkocity", () -> m_superstructure.getAimedFlywheelSurfaceVel());
         m_printer.addPose(

@@ -42,17 +42,16 @@ public class HoodContants {
     public static final double kPeakCurrentLimit = 40; // amps
     public static final double kPeakCurrentDuration = 10; // milliseconds
     public static final double kNominalVoltage = 11;
+    public static final double kOffset = Units.feetToMeters(0);
 
     public static final double[][] kHoodMap1 = {
-        {Units.feetToMeters(2) + GlobalConstants.kCenterOffsetMeters, 15},
-        {Units.feetToMeters(4) + GlobalConstants.kCenterOffsetMeters, 20},
-        {Units.feetToMeters(6) + GlobalConstants.kCenterOffsetMeters, 27},
-        {Units.feetToMeters(8) + GlobalConstants.kCenterOffsetMeters, 32},
-        {Units.feetToMeters(10) + GlobalConstants.kCenterOffsetMeters, 37},
-        {Units.feetToMeters(12) + GlobalConstants.kCenterOffsetMeters, 42},
-        {Units.feetToMeters(14) + GlobalConstants.kCenterOffsetMeters, 45},
-        {Units.feetToMeters(16) + GlobalConstants.kCenterOffsetMeters, 45},
-        {Units.feetToMeters(18) + GlobalConstants.kCenterOffsetMeters, 45}
+        {Units.feetToMeters(2) + GlobalConstants.kCenterOffsetMeters - kOffset, 15},
+        {Units.feetToMeters(4) + GlobalConstants.kCenterOffsetMeters - kOffset, 20},
+        {Units.feetToMeters(6) + GlobalConstants.kCenterOffsetMeters - kOffset, 27},
+        {Units.feetToMeters(8) + GlobalConstants.kCenterOffsetMeters - kOffset, 32},
+        {Units.feetToMeters(10) + GlobalConstants.kCenterOffsetMeters - kOffset, 37},
+        {Units.feetToMeters(12) + GlobalConstants.kCenterOffsetMeters - kOffset, 42},
+        {Units.feetToMeters(14) + GlobalConstants.kCenterOffsetMeters - kOffset, 45},
     };
     public static final double[][] kHoodMap = {
         {2.2, 25},
@@ -89,7 +88,7 @@ public class HoodContants {
         kHoodMotor.setInverted(kHoodMotorInvert);
         kHoodMotor.enableVoltageCompensation(true);
 
-        for (double[] pair : kHoodMap) {
+        for (double[] pair : kHoodMap1) {
             kHoodAutoAimMap.put(new InterpolatingDouble(pair[0]), new InterpolatingDouble(pair[1]));
         }
     }

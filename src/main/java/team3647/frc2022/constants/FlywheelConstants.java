@@ -50,19 +50,7 @@ public final class FlywheelConstants {
         {Units.feetToMeters(12) + GlobalConstants.kCenterOffsetMeters, 17.5 + kOffset},
         {Units.feetToMeters(14) + GlobalConstants.kCenterOffsetMeters, 18.2 + kOffset},
         {Units.feetToMeters(16) + GlobalConstants.kCenterOffsetMeters, 19.5 + kOffset},
-        {Units.feetToMeters(18) + GlobalConstants.kCenterOffsetMeters, 19.5 + kOffset}
-    };
-
-    public static final double[][] kFlywheelMap = {
-        {2.25, 9.3},
-        {2.6, 9.5},
-        {3, 9.6},
-        {3.17, 9.7},
-        {3.79, 10.1},
-        {3.94, 10.4},
-        {4.05, 10.5},
-        {4.15, 10.6},
-        {4.55, 11}
+        {Units.feetToMeters(18) + GlobalConstants.kCenterOffsetMeters, 20.5 + kOffset}
     };
 
     public static InterpolatingTreeMap<InterpolatingDouble, InterpolatingDouble>

@@ -218,7 +218,7 @@ public class Superstructure {
     public boolean readyToAutoShoot() {
         double turretSetpointNormalized =
                 getAimedTurretSetpoint() - 360.0 * Math.round(getAimedTurretSetpoint() / 360.0);
-        return Math.abs(m_flywheel.getVelocity() - getAimedFlywheelSurfaceVel()) < 0.1
+        return Math.abs(m_flywheel.getVelocity() - getAimedFlywheelSurfaceVel()) < 0.2
                 && Math.abs(m_hood.getAngle() - getAimedHoodAngle()) < 1
                 && Math.abs(m_flywheel.getVelocity()) > 5
                 && Math.abs(getAngleToTarget()) < 1;

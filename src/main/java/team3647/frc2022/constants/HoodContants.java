@@ -21,7 +21,7 @@ public class HoodContants {
     public static final double kFalconVelocityToDegpS = kFalconPositionToDegrees * 10;
     public static final double kMaxDegree = 40;
     public static final double kMinDegree = 15;
-    public static final double kBatterAngle = 20;
+    public static final double kBatterAngle = 15;
     public static final double kLowGoalAngle = 39;
     public static final double kPosThersholdDeg = 0.5;
     public static final boolean kCurrentLimitingEnable = false;
@@ -44,13 +44,13 @@ public class HoodContants {
     public static final double kNominalVoltage = 11;
 
     public static final double[][] kHoodMap1 = {
-        {Units.feetToMeters(2) + GlobalConstants.kCenterOffsetMeters, 14},
+        {Units.feetToMeters(2) + GlobalConstants.kCenterOffsetMeters, 15},
         {Units.feetToMeters(4) + GlobalConstants.kCenterOffsetMeters, 20},
-        {Units.feetToMeters(6) + GlobalConstants.kCenterOffsetMeters, 22.5},
-        {Units.feetToMeters(8) + GlobalConstants.kCenterOffsetMeters, 30},
-        {Units.feetToMeters(10) + GlobalConstants.kCenterOffsetMeters, 34},
-        {Units.feetToMeters(12) + GlobalConstants.kCenterOffsetMeters, 37.9},
-        {Units.feetToMeters(14) + GlobalConstants.kCenterOffsetMeters, 41},
+        {Units.feetToMeters(6) + GlobalConstants.kCenterOffsetMeters, 27},
+        {Units.feetToMeters(8) + GlobalConstants.kCenterOffsetMeters, 32},
+        {Units.feetToMeters(10) + GlobalConstants.kCenterOffsetMeters, 37},
+        {Units.feetToMeters(12) + GlobalConstants.kCenterOffsetMeters, 42},
+        {Units.feetToMeters(14) + GlobalConstants.kCenterOffsetMeters, 45},
         {Units.feetToMeters(16) + GlobalConstants.kCenterOffsetMeters, 45},
         {Units.feetToMeters(18) + GlobalConstants.kCenterOffsetMeters, 45}
     };

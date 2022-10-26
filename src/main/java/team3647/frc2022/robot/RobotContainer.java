@@ -96,6 +96,17 @@ public class RobotContainer {
                 .rightTrigger
                 .whileActiveOnce(m_superstructure.aimTurret())
                 .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot());
+        // mainController
+        //         .buttonB
+        //         .whileActiveOnce(
+        //                 new InstantCommand(
+        //                         () -> m_flywheel.setSurfaceSpeed(this.getShooterDashboard()),
+        //                         m_flywheel))
+        //         .whileActiveOnce(
+        //                 new InstantCommand(
+        //                         () -> m_hood.setAngleMotionMagic(this.getHoodDashboard()),
+        // m_hood))
+        //         .whileActiveOnce(m_superstructure.columnCommands.getRunInwards());
     }
 
     private void configureDefaultCommands() {
@@ -125,11 +136,12 @@ public class RobotContainer {
                         mainController::getRightStickX,
                         // () -> new Pose2d(),
                         () -> true));
-        m_hood.setDefaultCommand(
-                m_superstructure.hoodCommands.autoAdjustAngle(m_superstructure::getAimedHoodAngle));
-        m_flywheel.setDefaultCommand(
-                m_superstructure.flywheelCommands.waitToSpinDownThenHold(
-                        m_superstructure::getHoldVelocity));
+        // m_hood.setDefaultCommand(
+        //
+        // m_superstructure.hoodCommands.autoAdjustAngle(m_superstructure::getAimedHoodAngle));
+        // m_flywheel.setDefaultCommand(
+        //         m_superstructure.flywheelCommands.waitToSpinDownThenHold(
+        //                 m_superstructure::getHoldVelocity));
         m_turret.setDefaultCommand(m_superstructure.turretCommands.holdPositionAtCall());
         // m_wrist.setDefaultCommand(m_superstructure.wristCommands.holdPositionAtCall());
         m_column.setDefaultCommand(m_superstructure.feederManual(coController::getLeftStickY));

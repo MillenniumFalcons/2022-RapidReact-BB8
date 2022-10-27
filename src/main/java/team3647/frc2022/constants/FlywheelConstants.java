@@ -12,7 +12,7 @@ import team3647.lib.team254.util.InterpolatingTreeMap;
 
 public final class FlywheelConstants {
 
-    public static final TalonFXInvertType kMasterInverted = TalonFXInvertType.CounterClockwise;
+    public static final TalonFXInvertType kMasterInverted = TalonFXInvertType.Clockwise;
     public static final TalonFXConfiguration kMasterConfig = new TalonFXConfiguration();
 
     public static final boolean kCurrentLimitingEnable = true;
@@ -20,8 +20,8 @@ public final class FlywheelConstants {
     public static final double kMaxCurrent = 100;
     public static final double kMaxCurrentDurationSec = 1;
 
-    public static final double kS = 0.104902; // 0.57; // 0.74;
-    public static final double kV = 0.5195555; // 0.2;
+    public static final double kS = 0.261326; // 0.57; // 0.74;
+    public static final double kV = 0.547815; // 0.2;
     public static final double kA = 0.0238; // 0;
     public static final SimpleMotorFeedforward kFeedForward =
             new SimpleMotorFeedforward(kS, kV, kA);
@@ -38,12 +38,12 @@ public final class FlywheelConstants {
 
     public static final double kLowGoalVelocity = 3;
     public static final double kBatterVelocity = 15;
-    private static final double kOffset = 0.0;
+    private static final double kOffset = -2.4;
     private static final double kFarOffset = -0.4;
 
     public static final double[][] kFlywheelMap2 = {
         {Units.feetToMeters(2) + GlobalConstants.kCenterOffsetMeters, 15},
-        {Units.feetToMeters(4) + GlobalConstants.kCenterOffsetMeters, 16 + kOffset},
+        {Units.feetToMeters(4) + GlobalConstants.kCenterOffsetMeters, 15.4 + kOffset},
         {Units.feetToMeters(6) + GlobalConstants.kCenterOffsetMeters, 15.7 + kOffset},
         {Units.feetToMeters(8) + GlobalConstants.kCenterOffsetMeters, 16.5 + kOffset},
         {Units.feetToMeters(10) + GlobalConstants.kCenterOffsetMeters, 16.7 + kOffset},
@@ -63,7 +63,7 @@ public final class FlywheelConstants {
     public static double constantVelocityMpS = 5;
 
     static {
-        kMasterConfig.slot0.kP = 0.08; // 0.05;
+        kMasterConfig.slot0.kP = 0.03; // 0.05;
         kMasterConfig.slot0.kI = 0;
         kMasterConfig.slot0.kD = 0; // 0.08;
         kMasterConfig.slot0.kF = 0;

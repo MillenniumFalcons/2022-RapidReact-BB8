@@ -22,12 +22,11 @@ import team3647.frc2022.constants.ColumnConstants;
 import team3647.frc2022.constants.FlywheelConstants;
 import team3647.frc2022.constants.HoodContants;
 import team3647.frc2022.constants.TurretConstants;
+import team3647.frc2022.subsystems.vision.VisionController;
 import team3647.lib.tracking.FlightDeck;
-import team3647.lib.vision.AimingParameters;
 
 public class Superstructure {
 
-    private AimingParameters aimingParameters;
     private double flywheelVelocity = 0;
     private double angleToTarget = 0;
     private double kickerVelocity = 0;
@@ -35,6 +34,7 @@ public class Superstructure {
     private double turretVelFF = 0.0;
     private double turretSetpoint = TurretConstants.kStartingAngle;
 
+    private final VisionController vision;
     private final FlightDeck deck;
     private final Column m_column;
     private final Turret m_turret;
@@ -53,6 +53,7 @@ public class Superstructure {
     private final BooleanSupplier drivetrainStopped;
 
     public Superstructure(
+            VisionController vision,
             FlightDeck deck,
             Column m_column,
             Turret m_turret,
@@ -61,6 +62,7 @@ public class Superstructure {
             Wrist m_wrist,
             Intake m_intake,
             BooleanSupplier drivetrainStopped) {
+        this.vision = vision;
         this.deck = deck;
         this.m_column = m_column;
         this.m_turret = m_turret;
@@ -78,34 +80,24 @@ public class Superstructure {
     }
 
     public void periodic(double timestamp) {
-        aimingParameters = deck.getLatestParameters();
-        if (aimingParameters != null) {
-            flywheelVelocity = FlywheelConstants.getFlywheelRPM(aimingParameters.getRangeMeters());
+        if (vision.isValid()) {
+            flywheelVelocity = FlywheelConstants.getFlywheelRPM(vision.getDistance());
             kickerVelocity = MathUtil.clamp(flywheelVelocity * 0.5, 0, 10);
-            hoodAngle = HoodContants.getHoodAngle1(aimingParameters.getRangeMeters());
-            angleToTarget = aimingParameters.getTurretAngleToTarget().getDegrees();
-            turretSetpoint =
-                    m_turret.getAngle() + aimingParameters.getTurretAngleToTarget().getDegrees();
+            hoodAngle = HoodContants.getHoodAngle1(vision.getDistance());
+            angleToTarget = -vision.getYaw();
+            turretSetpoint = m_turret.getAngle() - vision.getYaw();
             Twist2d velocity = deck.getTracker().getMeasuredVelocity();
-            double tangential_component =
-                    aimingParameters.getRobotToTargetTransform().getRotation().getCos()
-                            * velocity.dy
-                            / aimingParameters.getRangeMeters();
             double angular_component = Units.radiansToDegrees(velocity.dtheta);
             // Add (opposite) of tangential velocity about goal + angular velocity in local frame.
-            turretVelFF = -(angular_component + tangential_component);
+            turretVelFF = -(angular_component);
         }
     }
 
     public double getDistanceToTarget() {
-        if (aimingParameters == null) {
+        if (!vision.isValid()) {
             return 0;
         }
-        return aimingParameters.getRangeMeters();
-    }
-
-    public AimingParameters getAimingParameters() {
-        return this.aimingParameters;
+        return vision.getDistance();
     }
 
     public Command aimTurret() {

@@ -47,7 +47,8 @@ public class AutoCommands {
                         new WaitCommand(
                                 PathPlannerTrajectories.straightPath.getTotalTimeSeconds() + 2.0),
                         superstructure.fastAutoAccelerateAndShoot().withTimeout(1.7));
-        return CommandGroupBase.parallel(turretSequence, drivetrainSequence, shooterFeederSequence);
+        return CommandGroupBase.parallel(
+                turretSequence, drivetrainSequence, shooterFeederSequence, intakeSequence);
     }
 
     public PPSwerveControllerCommand getPartCommand(String pathName) {

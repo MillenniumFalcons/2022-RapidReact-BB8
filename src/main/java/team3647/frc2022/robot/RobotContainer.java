@@ -65,7 +65,7 @@ public class RobotContainer {
         configureSmartDashboardLogging();
 
         m_swerve.setOdometry(
-                PathPlannerTrajectories.startStateStraightNinety,
+                PathPlannerTrajectories.startStateStraight,
                 new Rotation2d(Units.degreesToRadians(0)));
     }
 
@@ -96,6 +96,14 @@ public class RobotContainer {
                 .rightTrigger
                 .whileActiveOnce(m_superstructure.aimTurret())
                 .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot());
+        coController.dPadUp.whileActiveOnce(
+                m_superstructure.turretCommands.motionMagic(0.0).perpetually());
+        coController.dPadLeft.whileActiveOnce(
+                m_superstructure.turretCommands.motionMagic(90.0).perpetually());
+        coController.dPadRight.whileActiveOnce(
+                m_superstructure.turretCommands.motionMagic(-90.0).perpetually());
+        coController.dPadDown.whileActiveOnce(
+                m_superstructure.turretCommands.motionMagic(270.0).perpetually());
         // mainController
         //         .buttonB
         //         .whileActiveOnce(
@@ -175,7 +183,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return autoCommands.getCommand("straight ninety");
+        return autoCommands.getStraightCommand();
     }
 
     public double getSwerveAngle() {
@@ -301,5 +309,5 @@ public class RobotContainer {
     private final GroupPrinter m_printer = GroupPrinter.getInstance();
 
     private final AutoCommands autoCommands =
-            new AutoCommands(m_swerve, SwerveDriveConstants.kDriveKinematics);
+            new AutoCommands(m_swerve, SwerveDriveConstants.kDriveKinematics, m_superstructure);
 }

@@ -13,36 +13,29 @@ import team3647.frc2022.constants.AutoConstants;
 public class PathPlannerTrajectories {
     public static final PathPlannerTrajectory straightPath =
             PathPlanner.loadPath(
-                    "straight",
+                    "3 ball straight",
                     AutoConstants.kMaxSpeedMetersPerSecond,
                     AutoConstants.kMaxAccelerationMetersPerSecSq);
     public static final Pose2d startStateStraight = straightPath.getInitialPose();
 
-    public static final PathPlannerTrajectory straightYPath =
+    public static final PathPlannerTrajectory sixBallBump1 =
             PathPlanner.loadPath(
-                    "straight y",
+                    "6 ball bump 1",
                     AutoConstants.kMaxSpeedMetersPerSecond,
                     AutoConstants.kMaxAccelerationMetersPerSecSq);
-    public static final Pose2d startStateStraightY = straightYPath.getInitialPose();
+    public static final Pose2d startStateSixBallBump1 = sixBallBump1.getInitialPose();
 
-    public static final PathPlannerTrajectory eightPath =
+    public static final PathPlannerTrajectory sixBallBump2 =
             PathPlanner.loadPath(
-                    "eight",
+                    "6 ball bump 2",
                     AutoConstants.kMaxSpeedMetersPerSecond,
                     AutoConstants.kMaxAccelerationMetersPerSecSq);
-    public static final Pose2d startStateEight = eightPath.getInitialPose();
+    public static final Pose2d startStateSixBallBump2 = sixBallBump2.getInitialPose();
 
-    public static final PathPlannerTrajectory straightNinetyPath =
+    public static final PathPlannerTrajectory sixBallBump3 =
             PathPlanner.loadPath(
-                    "straight ninety",
+                    "6 ball bump 2",
                     AutoConstants.kMaxSpeedMetersPerSecond,
                     AutoConstants.kMaxAccelerationMetersPerSecSq);
-    public static final Pose2d startStateStraightNinety = straightNinetyPath.getInitialPose();
-
-    public static final PathPlannerTrajectory fiveBallPath =
-            PathPlanner.loadPath(
-                    "five ball",
-                    AutoConstants.kMaxSpeedMetersPerSecond,
-                    AutoConstants.kMaxAccelerationMetersPerSecSq);
-    public static final Pose2d startStateFiveBall = fiveBallPath.getInitialPose();
+    public static final Pose2d startStateSixBallBump3 = sixBallBump3.getInitialPose();
 }

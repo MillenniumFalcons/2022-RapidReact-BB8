@@ -49,7 +49,7 @@ public class TurretConstants {
     public static final Translation2d kRobotToTurretFixed =
             new Translation2d(Units.inchesToMeters(2), 0);
     public static final Translation2d kTurretToCamTranslationMeters =
-            new Translation2d(Units.inchesToMeters(10.37), 0);
+            new Translation2d(Units.inchesToMeters(5), 0); // 10.37
     public static final Pose2d kTurretToCamFixed =
             new Pose2d(kTurretToCamTranslationMeters, new Rotation2d());
 

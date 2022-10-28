@@ -88,9 +88,12 @@ public class Superstructure {
                     m_turret.getAngle() + aimingParameters.getTurretAngleToTarget().getDegrees();
             Twist2d velocity = deck.getTracker().getMeasuredVelocity();
             double tangential_component =
-                    aimingParameters.getRobotToTargetTransform().getRotation().getCos()
-                            * velocity.dy
-                            / aimingParameters.getRangeMeters();
+                    (aimingParameters.getRobotToTargetTransform().getRotation().getCos()
+                                    * velocity.dy
+                                    / aimingParameters.getRangeMeters())
+                            + (aimingParameters.getRobotToTargetTransform().getRotation().getSin()
+                                    * velocity.dx
+                                    / aimingParameters.getRangeMeters());
             double angular_component = Units.radiansToDegrees(velocity.dtheta);
             // Add (opposite) of tangential velocity about goal + angular velocity in local frame.
             turretVelFF = -(angular_component + tangential_component);

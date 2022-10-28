@@ -26,23 +26,23 @@ public class AutoCommands {
 
     public Command getStraightCommand() {
         Command turretSequence =
-                superstructure
-                        .turretCommands
-                        .motionMagic(0)
+                new WaitCommand(0.5)
+                        .andThen(superstructure.turretCommands.motionMagic(0))
                         .andThen(new WaitCommand(0.2), superstructure.aimTurret());
         Command drivetrainSequence =
-                CommandGroupBase.sequence(new WaitCommand(1.5), getPartCommand("straight"));
+                CommandGroupBase.sequence(new WaitCommand(1.8), getPartCommand("straight"));
         Command intakeSequence =
                 CommandGroupBase.sequence(
+                        superstructure.retractIntake().withTimeout(0.8),
                         new WaitCommand(
-                                1.5
+                                1.0
                                         + PathPlannerTrajectories.straightPath.getTotalTimeSeconds()
                                         - 1.2),
                         superstructure.deployAndRunIntake(() -> 5).withTimeout(1.5),
                         superstructure.retractIntake());
         Command shooterFeederSequence =
                 CommandGroupBase.sequence(
-                        new WaitCommand(0.3),
+                        new WaitCommand(0.6),
                         superstructure.fastAutoAccelerateAndShoot().withTimeout(1.2),
                         new WaitCommand(
                                 PathPlannerTrajectories.straightPath.getTotalTimeSeconds() + 2.0),

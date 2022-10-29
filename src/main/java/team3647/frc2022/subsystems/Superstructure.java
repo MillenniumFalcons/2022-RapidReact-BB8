@@ -1,6 +1,5 @@
 package team3647.frc2022.subsystems;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Twist2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -29,7 +28,7 @@ public class Superstructure {
 
     private double flywheelVelocity = 0;
     private double angleToTarget = 0;
-    private double kickerVelocity = 0;
+    private double kickerVelocity = ColumnConstants.kShootVelocity;
     private double hoodAngle = 16;
     private double turretVelFF = 0.0;
     private double turretSetpoint = TurretConstants.kStartingAngle;
@@ -82,7 +81,6 @@ public class Superstructure {
     public void periodic(double timestamp) {
         if (vision.isValid()) {
             flywheelVelocity = FlywheelConstants.getFlywheelRPM(vision.getDistance());
-            kickerVelocity = MathUtil.clamp(flywheelVelocity * 0.5, 0, 10);
             hoodAngle = HoodContants.getHoodAngle1(vision.getDistance());
             angleToTarget = -vision.getYaw();
             turretSetpoint = m_turret.getAngle() - vision.getYaw();

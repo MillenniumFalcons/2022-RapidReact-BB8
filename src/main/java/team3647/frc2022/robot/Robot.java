@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
     public static final double kTenMSLoopTime = 0.01;
     public static final double kTwentyMSLoopTime = 0.02;
 
-    private RobotContainer m_robotContainer;
+    private RobotContainer m_robotContainer = new RobotContainer();
 
     public Robot() {
         super(.02);

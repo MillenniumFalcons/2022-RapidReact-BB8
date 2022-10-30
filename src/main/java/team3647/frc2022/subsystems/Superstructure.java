@@ -203,9 +203,7 @@ public class Superstructure {
                                         .andThen(new WaitCommand(delayAfterDrivetrainStops)),
                                 drivetrainStopped),
                         new WaitUntilCommand(readyToShoot),
-                        columnCommands
-                                .getGoVariableVelocity(kickerVelocity)
-                                .alongWith(intakeCommands.openLoopAndStop(0.3))));
+                        columnCommands.getGoVariableVelocity(kickerVelocity)));
     }
 
     public double getAimedFlywheelSurfaceVel() {

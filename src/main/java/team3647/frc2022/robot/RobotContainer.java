@@ -64,9 +64,10 @@ public class RobotContainer {
         configureDefaultCommands();
         configureSmartDashboardLogging();
 
+        // rot 2d is the rotation of the robot relative to field during auto
         m_swerve.setOdometry(
                 PathPlannerTrajectories.startStateStraight,
-                new Rotation2d(Units.degreesToRadians(0)));
+                new Rotation2d(Units.degreesToRadians(-45)));
     }
 
     private void configureButtonBindings() {
@@ -175,7 +176,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return autoCommands.getStraightCommand();
+        return autoCommands.getStraight();
     }
 
     public double getSwerveAngle() {

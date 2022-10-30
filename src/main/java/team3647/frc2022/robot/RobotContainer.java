@@ -88,15 +88,16 @@ public class RobotContainer {
         // co controller
         coController.leftTrigger.whileActiveOnce(
                 m_superstructure
-                        .deployAndRunIntake(() -> 5)
-                        .alongWith(m_superstructure.feederWithSensor(() -> 3)));
+                        .deployAndRunIntake(() -> 8.5)
+                        .alongWith(m_superstructure.feederWithSensor(() -> 2)));
 
         coController.leftTrigger.whenInactive(m_superstructure.retractIntake());
 
         coController
                 .rightTrigger
                 .whileActiveOnce(m_superstructure.aimTurret())
-                .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot());
+                .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot())
+                .whileActiveOnce(m_superstructure.intakeCommands.openLoopAndStop(0.3));
         // mainController
         //         .buttonB
         //         .whileActiveOnce(

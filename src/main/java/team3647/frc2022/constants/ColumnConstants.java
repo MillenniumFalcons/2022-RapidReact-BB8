@@ -33,7 +33,7 @@ public final class ColumnConstants {
     public static final DigitalInput kTopBanner =
             new DigitalInput(GlobalConstants.ColumnIds.kTopSensorPin);
 
-    public static final double kShootVelocity = 1.5;
+    public static final double kShootVelocity = 0.7;
 
     static {
         kMasterConfig.slot0.kP = 0.02;

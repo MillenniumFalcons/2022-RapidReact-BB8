@@ -280,7 +280,7 @@ public class RobotContainer {
 
     final VisionController m_visionController =
             new VisionController(
-                    new Limelight("10.36.47.15", 0.018, VisionConstants.limelightConstants),
+                    new Limelight("10.96.47.15", 0.018, VisionConstants.limelightConstants),
                     VisionConstants.kCenterGoalTargetConstants,
                     m_flightDeck::addVisionObservation,
                     this::updateTapeTranslations);

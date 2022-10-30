@@ -59,8 +59,8 @@ public final class GlobalConstants {
     }
 
     public static final class FlywheelIds {
-        public static final int kMasterId = 19;
-        public static final int kFollowerId = 18;
+        public static final int kMasterId = 18;
+        public static final int kFollowerId = 19;
     }
 
     private GlobalConstants() {}

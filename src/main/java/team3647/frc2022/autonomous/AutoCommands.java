@@ -24,29 +24,31 @@ public class AutoCommands {
         this.driveKinematics = driveKinematics;
     }
 
-    public Command getStraightCommand() {
+    public Command getStraight() {
         Command turretSequence =
                 new WaitCommand(0.5)
                         .andThen(superstructure.turretCommands.motionMagic(0))
                         .andThen(new WaitCommand(0.2), superstructure.aimTurret());
         Command drivetrainSequence =
-                CommandGroupBase.sequence(new WaitCommand(1.8), getPartCommand("straight"));
+                CommandGroupBase.sequence(new WaitCommand(2), getPartCommand("straight"));
         Command intakeSequence =
                 CommandGroupBase.sequence(
-                        superstructure.retractIntake().withTimeout(0.8),
+                        superstructure.retractIntake().withTimeout(1),
                         new WaitCommand(
                                 1.0
                                         + PathPlannerTrajectories.straightPath.getTotalTimeSeconds()
                                         - 1.2),
                         superstructure.deployAndRunIntake(() -> 5).withTimeout(1.5),
-                        superstructure.retractIntake());
+                        superstructure
+                                .retractIntake()
+                                .alongWith(superstructure.intakeCommands.openLoopAndStop(0.3)));
         Command shooterFeederSequence =
                 CommandGroupBase.sequence(
                         new WaitCommand(0.6),
-                        superstructure.fastAutoAccelerateAndShoot().withTimeout(1.2),
+                        superstructure.fastAutoAccelerateAndShoot().withTimeout(1.4),
                         new WaitCommand(
                                 PathPlannerTrajectories.straightPath.getTotalTimeSeconds() + 2.0),
-                        superstructure.fastAutoAccelerateAndShoot().withTimeout(1.7));
+                        superstructure.fastAutoAccelerateAndShoot());
         return CommandGroupBase.parallel(
                 turretSequence, drivetrainSequence, shooterFeederSequence, intakeSequence);
     }

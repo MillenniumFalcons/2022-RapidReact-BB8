@@ -99,6 +99,7 @@ public class Turret extends TalonFXSubsystem {
 
     @Override
     public void periodic() {
+        // readperiodic outputs is in robot.java
         writePeriodicOutputs();
     }
 

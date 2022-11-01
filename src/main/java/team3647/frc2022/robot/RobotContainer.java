@@ -66,7 +66,7 @@ public class RobotContainer {
 
         m_swerve.setOdometry(
                 PathPlannerTrajectories.startStateStraight,
-                new Rotation2d(Units.degreesToRadians(0)));
+                new Rotation2d(Units.degreesToRadians(-45)));
     }
 
     private void configureButtonBindings() {
@@ -173,6 +173,7 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
         return autoCommands.getStraightCommand();
+        // return null;
     }
 
     public double getSwerveAngle() {
@@ -277,7 +278,7 @@ public class RobotContainer {
 
     final VisionController m_visionController =
             new VisionController(
-                    "10.36.47.15",
+                    "10.96.47.15",
                     VisionConstants.limelightConstants,
                     VisionConstants.kCenterGoalTargetConstants);
 

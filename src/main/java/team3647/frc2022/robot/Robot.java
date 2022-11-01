@@ -21,7 +21,7 @@ public class Robot extends TimedRobot {
     public static final double kTenMSLoopTime = 0.01;
     public static final double kTwentyMSLoopTime = 0.02;
 
-    private RobotContainer m_robotContainer;
+    private RobotContainer m_robotContainer = new RobotContainer();
 
     public Robot() {
         super(.02);
@@ -54,7 +54,6 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer();
         m_robotContainer.m_swerve.resetModuleAngle();
     }
 

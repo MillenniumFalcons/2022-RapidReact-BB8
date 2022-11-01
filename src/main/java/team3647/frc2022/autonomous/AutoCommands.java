@@ -24,6 +24,7 @@ public class AutoCommands {
         this.driveKinematics = driveKinematics;
     }
 
+    // intake and shooter feeder both require feeder
     public Command getStraightCommand() {
         Command turretSequence =
                 new WaitCommand(0.5)
@@ -38,15 +39,13 @@ public class AutoCommands {
                                 1.0
                                         + PathPlannerTrajectories.straightPath.getTotalTimeSeconds()
                                         - 1.2),
-                        superstructure.deployAndRunIntake(() -> 5).withTimeout(1.5),
                         superstructure.retractIntake());
         Command shooterFeederSequence =
                 CommandGroupBase.sequence(
                         new WaitCommand(0.6),
                         superstructure.fastAutoAccelerateAndShoot().withTimeout(1.2),
                         new WaitCommand(
-                                PathPlannerTrajectories.straightPath.getTotalTimeSeconds() + 2.0),
-                        superstructure.fastAutoAccelerateAndShoot().withTimeout(1.7));
+                                PathPlannerTrajectories.straightPath.getTotalTimeSeconds() + 2.0));
         return CommandGroupBase.parallel(
                 turretSequence, drivetrainSequence, shooterFeederSequence, intakeSequence);
     }

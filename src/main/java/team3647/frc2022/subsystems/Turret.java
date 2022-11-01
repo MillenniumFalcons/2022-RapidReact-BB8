@@ -99,6 +99,8 @@ public class Turret extends TalonFXSubsystem {
 
     @Override
     public void periodic() {
+        // SmartDashboard.putNumber("Turret", this.getAngle());
+        // readPeriodicInputs();
         writePeriodicOutputs();
     }
 

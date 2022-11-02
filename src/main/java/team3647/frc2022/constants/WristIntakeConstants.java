@@ -75,7 +75,7 @@ public class WristIntakeConstants {
         kIntakeMotorConfig.slot0.kD = 0;
         kIntakeMotorConfig.slot0.kF = 0;
 
-        kDeployMotorConfig.slot0.kP = 0.1;
+        kDeployMotorConfig.slot0.kP = 0.13;
         kDeployMotorConfig.slot0.kI = 0.0;
         kDeployMotorConfig.slot0.kD = 0.05;
 
@@ -84,9 +84,9 @@ public class WristIntakeConstants {
         kDeployMotorConfig.supplyCurrLimit.enable = kCurrentLimitingEnable;
         kDeployMotorConfig.supplyCurrLimit.currentLimit = kStallCurrent;
 
-        kDeployMotorConfig.motionAcceleration = 21000;
+        kDeployMotorConfig.motionAcceleration = 25000;
         // in native units/100ms
-        kDeployMotorConfig.motionCruiseVelocity = 21000;
+        kDeployMotorConfig.motionCruiseVelocity = 25000;
 
         kIntakeMotor.configAllSettings(kIntakeMotorConfig, GlobalConstants.kTimeoutMS);
         kDeployMotor.configAllSettings(kDeployMotorConfig, GlobalConstants.kTimeoutMS);

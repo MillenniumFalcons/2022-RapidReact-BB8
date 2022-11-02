@@ -30,6 +30,8 @@ public class Superstructure {
     private double flywheelVelocity = 0;
     private double angleToTarget = 0;
     private double kickerVelocity = ColumnConstants.kShootVelocity;
+    private double fastIntakeVelocity = ColumnConstants.kFastIntakeVelocity;
+    private double slowIntakeVelocity = ColumnConstants.kSlowIntakeVelocity;
     private double hoodAngle = 16;
     private double turretVelFF = 0.0;
     private double turretSetpoint = TurretConstants.kStartingAngle;
@@ -184,15 +186,32 @@ public class Superstructure {
         return fastAccelerateAndShoot(
                 this::getAimedFlywheelSurfaceVel,
                 this::getAimedKickerVelocity,
+                this::getIntakeSlowColumnVelocity,
+                this::getIntakeFastColumnVelocity,
                 this::readyToAutoShoot,
                 0);
     }
 
     public Command fastAccelerateAndShoot(
             DoubleSupplier flywheelVelocity,
-            DoubleSupplier kickerVelocity,
+            DoubleSupplier shootingColumnVelocity,
+            DoubleSupplier intakingSlowColumnVelocity,
+            DoubleSupplier intakingFastColumnVelocity,
             BooleanSupplier readyToShoot,
             double delayAfterDrivetrainStops) {
+
+        Command columnSpeedFlywheelBad =
+                new ConditionalCommand(
+                        columnCommands.getGoVariableVelocity(
+                                () -> 0.0), // flywheel bad, sensor true (stop moving)
+                        // flywheel bad, sensor false (need to move ball up from the bottom):
+                        columnCommands.getGoVariableVelocity(intakingFastColumnVelocity),
+                        m_column::getSensorValue);
+        Command columnSpeedFlywheelGood =
+                new ConditionalCommand(
+                        columnCommands.getGoVariableVelocity(shootingColumnVelocity),
+                        columnCommands.getGoVariableVelocity(intakingSlowColumnVelocity),
+                        m_column::getSensorValue);
 
         return CommandGroupBase.parallel(
                 flywheelCommands.variableVelocity(flywheelVelocity),
@@ -202,8 +221,10 @@ public class Superstructure {
                                 new WaitUntilCommand(drivetrainStopped)
                                         .andThen(new WaitCommand(delayAfterDrivetrainStops)),
                                 drivetrainStopped),
-                        new WaitUntilCommand(readyToShoot),
-                        columnCommands.getGoVariableVelocity(kickerVelocity)));
+                        new WaitUntilCommand(readyToShoot)
+                                .raceWith(
+                                        columnSpeedFlywheelBad), // ends when ready to shoot is true
+                        columnSpeedFlywheelGood));
     }
 
     public double getAimedFlywheelSurfaceVel() {
@@ -212,6 +233,14 @@ public class Superstructure {
 
     public double getAimedKickerVelocity() {
         return kickerVelocity;
+    }
+
+    public double getIntakeSlowColumnVelocity() {
+        return slowIntakeVelocity;
+    }
+
+    public double getIntakeFastColumnVelocity() {
+        return fastIntakeVelocity;
     }
 
     public boolean readyToAutoShoot() {

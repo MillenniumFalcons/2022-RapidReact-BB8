@@ -89,9 +89,14 @@ public class RobotContainer {
         coController.leftTrigger.whileActiveOnce(
                 m_superstructure
                         .deployAndRunIntake(() -> 8.5)
-                        .alongWith(m_superstructure.feederWithSensor(() -> 2)));
+                        .alongWith(
+                                m_superstructure.feederWithSensor(
+                                        () -> ColumnConstants.kFastIntakeVelocity)));
 
-        coController.leftTrigger.whenInactive(m_superstructure.retractIntake());
+        coController.leftTrigger.whenInactive(
+                m_superstructure
+                        .retractIntake()
+                        .alongwith(m_superstructure.intakeCommands.openLoopAndStop(0.4)));
 
         coController
                 .rightTrigger

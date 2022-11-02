@@ -3,7 +3,6 @@ package team3647.frc2022.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -43,6 +42,19 @@ import team3647.lib.vision.MultiTargetTracker;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    public enum Auto {
+        STRAIGHT_THREE(0),
+        SIX_BALL(1);
+        int index;
+
+        Auto(int index) {
+            this.index = index;
+        }
+    }
+
+    // CHANGE AUTO HERE
+    public Auto currentAuto = Auto.STRAIGHT_THREE;
+
     private final Joysticks mainController = new Joysticks(0);
     private final Joysticks coController = new Joysticks(1);
 
@@ -63,11 +75,9 @@ public class RobotContainer {
         configureButtonBindings();
         configureDefaultCommands();
         configureSmartDashboardLogging();
-
+        chooseAuto();
         // rot 2d is the rotation of the robot relative to field during auto
-        m_swerve.setOdometry(
-                PathPlannerTrajectories.startStateStraight,
-                new Rotation2d(Units.degreesToRadians(-45)));
+        m_swerve.setOdometry(startPosition, startPosition.getRotation());
     }
 
     private void configureButtonBindings() {
@@ -309,4 +319,23 @@ public class RobotContainer {
 
     private final AutoCommands autoCommands =
             new AutoCommands(m_swerve, SwerveDriveConstants.kDriveKinematics, m_superstructure);
+    private Pose2d startPosition = PathPlannerTrajectories.startStateStraight;
+    private Command autoCommand = autoCommands.getStraight();
+
+    public void chooseAuto() {
+        switch (currentAuto) {
+            case STRAIGHT_THREE:
+                startPosition = PathPlannerTrajectories.startStateStraight;
+                autoCommand = autoCommands.getStraight();
+                break;
+                //     case SIX_BALL:
+                //         startPosition = AutoConstants.positionOnTarmacParallel;
+                //         autoCommand = autoCommands.mikeJordanSixBall();
+                //         break;
+            default:
+                startPosition = PathPlannerTrajectories.startStateStraight;
+                autoCommand = autoCommands.getStraight();
+                break;
+        }
+    }
 }

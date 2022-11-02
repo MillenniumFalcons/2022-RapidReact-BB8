@@ -7,6 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import java.util.LinkedList;
 import java.util.List;
 import team3647.frc2022.autonomous.AutoCommands;
@@ -98,17 +99,16 @@ public class RobotContainer {
                 .whileActiveOnce(m_superstructure.aimTurret())
                 .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot())
                 .whileActiveOnce(m_superstructure.intakeCommands.openLoopAndStop(0.3));
-        // mainController
-        //         .buttonB
-        //         .whileActiveOnce(
-        //                 new InstantCommand(
-        //                         () -> m_flywheel.setSurfaceSpeed(this.getShooterDashboard()),
-        //                         m_flywheel))
-        //         .whileActiveOnce(
-        //                 new InstantCommand(
-        //                         () -> m_hood.setAngleMotionMagic(this.getHoodDashboard()),
-        // m_hood))
-        //         .whileActiveOnce(m_superstructure.columnCommands.getRunInwards());
+        mainController
+                .buttonB
+                .whileActiveOnce(
+                        new InstantCommand(
+                                () -> m_flywheel.setSurfaceSpeed(this.getShooterDashboard()),
+                                m_flywheel))
+                .whileActiveOnce(
+                        new InstantCommand(
+                                () -> m_hood.setAngleMotionMagic(this.getHoodDashboard()), m_hood))
+                .whileActiveOnce(m_superstructure.columnCommands.getRunInwards());
     }
 
     private void configureDefaultCommands() {

@@ -172,7 +172,9 @@ public class Superstructure {
                 .andThen(
                         fastAccelerateAndShoot(
                                 this::getBatterVelocity,
-                                () -> ColumnConstants.kShootVelocity,
+                                this::getAimedKickerVelocity,
+                                this::getIntakeSlowColumnVelocity,
+                                this::getIntakeFastColumnVelocity,
                                 this::readyToBatter,
                                 0));
     }
@@ -206,12 +208,12 @@ public class Superstructure {
                                 () -> 0.0), // flywheel bad, sensor true (stop moving)
                         // flywheel bad, sensor false (need to move ball up from the bottom):
                         columnCommands.getGoVariableVelocity(intakingFastColumnVelocity),
-                        m_column::getSensorValue);
+                        m_column::getTopBannerValue);
         Command columnSpeedFlywheelGood =
                 new ConditionalCommand(
                         columnCommands.getGoVariableVelocity(shootingColumnVelocity),
                         columnCommands.getGoVariableVelocity(intakingSlowColumnVelocity),
-                        m_column::getSensorValue);
+                        m_column::getTopBannerValue);
 
         return CommandGroupBase.parallel(
                 flywheelCommands.variableVelocity(flywheelVelocity),

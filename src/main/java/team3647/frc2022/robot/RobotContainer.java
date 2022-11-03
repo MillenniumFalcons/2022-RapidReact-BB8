@@ -6,7 +6,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import java.util.LinkedList;
 import java.util.List;
 import team3647.frc2022.autonomous.AutoCommands;
@@ -104,26 +103,26 @@ public class RobotContainer {
                                 m_superstructure.feederWithSensor(
                                         () -> ColumnConstants.kFastIntakeVelocity)));
 
-        coController
-                .leftTrigger
-                .whenInactive(m_superstructure.retractIntake())
-                .whenInactive(m_superstructure.intakeCommands.openLoopAndStop(0.4));
+        coController.leftTrigger.whenInactive(m_superstructure.retractIntake());
 
         coController
                 .rightTrigger
                 .whileActiveOnce(m_superstructure.aimTurret())
                 .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot())
                 .whileActiveOnce(m_superstructure.intakeCommands.openLoopAndStop(0.3));
-        mainController
-                .buttonB
-                .whileActiveOnce(
-                        new InstantCommand(
-                                () -> m_flywheel.setSurfaceSpeed(this.getShooterDashboard()),
-                                m_flywheel))
-                .whileActiveOnce(
-                        new InstantCommand(
-                                () -> m_hood.setAngleMotionMagic(this.getHoodDashboard()), m_hood))
-                .whileActiveOnce(m_superstructure.columnCommands.getRunInwards());
+        // mainController
+        //         .buttonB
+        //         .whileActiveOnce(
+        //                 new InstantCommand(
+        //                         () -> m_flywheel.setSurfaceSpeed(this.getShooterDashboard()),
+        //                         m_flywheel))
+        //         .whileActiveOnce(
+        //                 new InstantCommand(
+        //                         () -> m_hood.setAngleMotionMagic(this.getHoodDashboard()),
+        // m_hood))
+        //         .whileActiveOnce(
+        //                 m_superstructure.columnCommands.getGoVariableVelocity(
+        //                         () -> ColumnConstants.kSlowIntakeVelocity));
     }
 
     private void configureDefaultCommands() {
@@ -297,7 +296,7 @@ public class RobotContainer {
 
     final VisionController m_visionController =
             new VisionController(
-                    new Limelight("10.96.47.15", 0.018, VisionConstants.limelightConstants),
+                    new Limelight("10.36.47.15", 0.018, VisionConstants.limelightConstants),
                     VisionConstants.kCenterGoalTargetConstants,
                     m_flightDeck::addVisionObservation,
                     this::updateTapeTranslations);

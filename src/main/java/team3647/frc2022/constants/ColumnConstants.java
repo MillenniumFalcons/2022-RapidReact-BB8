@@ -36,7 +36,7 @@ public final class ColumnConstants {
     // all in m/s
     public static final double kShootVelocity = 3.0;
     public static final double kFastIntakeVelocity = 3.0;
-    public static final double kSlowIntakeVelocity = 1.0;
+    public static final double kSlowIntakeVelocity = 2.0;
 
     static {
         kMasterConfig.slot0.kP = 0.02;

@@ -8,7 +8,7 @@ import team3647.lib.vision.VisionTargetConstants;
 public class VisionConstants {
     public static String kLimelightIP = "10.36.47.16";
     public static double kNetworkLatency = 0.06; // seconds
-    public static double kCameraHeightMeters = Units.inchesToMeters(43.8);
+    public static double kCameraHeightMeters = Units.inchesToMeters(43.7);
     public static double kTopOfTapeHeightMeters = Units.inchesToMeters(104);
     public static double kBottomOfTapeHeightMeters = Units.inchesToMeters(102);
 

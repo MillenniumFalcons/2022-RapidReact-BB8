@@ -17,7 +17,7 @@ public class WristIntakeConstants {
     public static final TalonFXConfiguration kIntakeMotorConfig = new TalonFXConfiguration();
     public static final TalonFXConfiguration kDeployMotorConfig = new TalonFXConfiguration();
 
-    public static final double intakableDegree = 155.0;
+    public static final double intakableDegree = 150.0;
     public static final double zeroDeg = 30.0;
 
     public static final double kPosThersholdDeg = 0.5;
@@ -75,7 +75,7 @@ public class WristIntakeConstants {
         kIntakeMotorConfig.slot0.kD = 0;
         kIntakeMotorConfig.slot0.kF = 0;
 
-        kDeployMotorConfig.slot0.kP = 0.1;
+        kDeployMotorConfig.slot0.kP = 0.13;
         kDeployMotorConfig.slot0.kI = 0.0;
         kDeployMotorConfig.slot0.kD = 0.05;
 
@@ -84,9 +84,9 @@ public class WristIntakeConstants {
         kDeployMotorConfig.supplyCurrLimit.enable = kCurrentLimitingEnable;
         kDeployMotorConfig.supplyCurrLimit.currentLimit = kStallCurrent;
 
-        kDeployMotorConfig.motionAcceleration = 21000;
+        kDeployMotorConfig.motionAcceleration = 45000;
         // in native units/100ms
-        kDeployMotorConfig.motionCruiseVelocity = 21000;
+        kDeployMotorConfig.motionCruiseVelocity = 45000;
 
         kIntakeMotor.configAllSettings(kIntakeMotorConfig, GlobalConstants.kTimeoutMS);
         kDeployMotor.configAllSettings(kDeployMotorConfig, GlobalConstants.kTimeoutMS);

@@ -3,6 +3,7 @@ package team3647.frc2022.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -75,9 +76,16 @@ public class RobotContainer {
         configureButtonBindings();
         configureDefaultCommands();
         configureSmartDashboardLogging();
-        chooseAuto();
+        // chooseAuto();
         // rot 2d is the rotation of the robot relative to field during auto
-        m_swerve.setOdometry(startPosition, startPosition.getRotation());
+        // m_swerve.setOdometry(startPosition, startPosition.getRotation());
+
+        m_swerve.setOdometry(
+                PathPlannerTrajectories.startStateStraight,
+                new Rotation2d(Units.degreesToRadians(-45)));
+        // m_swerve.setOdometry(
+        //         PathPlannerTrajectories.startStateSixBallBump1,
+        //         new Rotation2d(Units.degreesToRadians(45)));
     }
 
     private void configureButtonBindings() {
@@ -105,7 +113,7 @@ public class RobotContainer {
 
         coController.leftTrigger.whenInactive(m_superstructure.retractIntake());
 
-        coController
+        mainController
                 .rightTrigger
                 .whileActiveOnce(m_superstructure.aimTurret())
                 .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot())
@@ -179,6 +187,8 @@ public class RobotContainer {
                 });
         SmartDashboard.putNumber("Hood Angle", 16.0);
         SmartDashboard.putNumber("Shooter Velocity", 5.0);
+        m_printer.addDouble("intake velocity brr", () -> m_intake.getVelocity());
+        m_printer.addBoolean("Ready to Shoot", () -> m_superstructure.readyToAutoShoot());
     }
 
     public double getShooterDashboard() {

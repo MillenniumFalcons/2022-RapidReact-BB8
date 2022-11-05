@@ -12,12 +12,18 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import team3647.frc2022.constants.SwerveDriveConstants;
 import team3647.lib.PeriodicSubsystem;
+import team3647.lib.team254.util.MovingAverage;
 
 public class SwerveDrive implements PeriodicSubsystem {
     private final SwerveModule frontLeft;
     private final SwerveModule frontRight;
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
+
+    private final MovingAverage frontLeftAverageSpeed = new MovingAverage(10);
+    private final MovingAverage frontRightAverageSpeed = new MovingAverage(10);
+    private final MovingAverage backLeftAverageSpeed = new MovingAverage(10);
+    private final MovingAverage backRightAverageSpeed = new MovingAverage(10);
 
     private final Pigeon2 gyro;
 
@@ -76,6 +82,11 @@ public class SwerveDrive implements PeriodicSubsystem {
         periodicIO.frontRightState = frontRight.getState();
         periodicIO.backLeftState = backLeft.getState();
         periodicIO.backRightState = backRight.getState();
+
+        frontLeftAverageSpeed.add(periodicIO.frontLeftState.speedMetersPerSecond);
+        frontRightAverageSpeed.add(periodicIO.frontRightState.speedMetersPerSecond);
+        backLeftAverageSpeed.add(periodicIO.backLeftState.speedMetersPerSecond);
+        backRightAverageSpeed.add(periodicIO.backRightState.speedMetersPerSecond);
 
         odometry.update(
                 getRotation2d(),
@@ -342,9 +353,16 @@ public class SwerveDrive implements PeriodicSubsystem {
     //             && Math.abs(leftAverageSpeed.getAverage()) < threshold;
     // }
 
-    public boolean isStopped() {
-        // return isStopped();
+    public boolean isStopped(double threshold) {
+        // return Math.abs(frontLeftAverageSpeed.getAverage()) < threshold
+        //         && Math.abs(frontRightAverageSpeed.getAverage()) < threshold
+        //         && Math.abs(backLeftAverageSpeed.getAverage()) < threshold
+        //         && Math.abs(backRightAverageSpeed.getAverage()) < threshold;
         return true;
+    }
+
+    public boolean isStopped() {
+        return isStopped(0.0127);
     }
 
     @Override

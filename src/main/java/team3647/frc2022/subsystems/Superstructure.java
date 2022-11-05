@@ -35,6 +35,7 @@ public class Superstructure {
     private double hoodAngle = 16;
     private double turretVelFF = 0.0;
     private double turretSetpoint = TurretConstants.kStartingAngle;
+    private double intakeOutput = 8.5;
 
     private final FlightDeck deck;
     private final Column m_column;
@@ -96,6 +97,10 @@ public class Superstructure {
                                     / aimingParameters.getRangeMeters());
             double angular_component = Units.radiansToDegrees(velocity.dtheta);
             // Add (opposite) of tangential velocity about goal + angular velocity in local frame.
+            double xVel = Math.abs(deck.getTracker().getMeasuredVelocity().dx);
+            double yVel = Math.abs(deck.getTracker().getMeasuredVelocity().dy);
+            double thetaVel = Math.abs(deck.getTracker().getMeasuredVelocity().dtheta);
+            intakeOutput = Math.max(Math.max(xVel, yVel), thetaVel) * 5;
             turretVelFF = -(angular_component + tangential_component);
         }
     }
@@ -131,7 +136,10 @@ public class Superstructure {
 
     public Command deployAndRunIntake(DoubleSupplier surfaceVelocity) {
         return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(surfaceVelocity));
-        // return intakeCommands.runClosedLoop(surfaceVelocity);
+    }
+
+    public Command deployAndRunIntake() {
+        return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(() -> intakeOutput));
     }
 
     public Command retractIntake() {
@@ -246,8 +254,6 @@ public class Superstructure {
     }
 
     public boolean readyToAutoShoot() {
-        double turretSetpointNormalized =
-                getAimedTurretSetpoint() - 360.0 * Math.round(getAimedTurretSetpoint() / 360.0);
         return Math.abs(m_flywheel.getVelocity() - getAimedFlywheelSurfaceVel()) < 0.2
                 && Math.abs(m_hood.getAngle() - getAimedHoodAngle()) < 1
                 && Math.abs(m_flywheel.getVelocity()) > 5

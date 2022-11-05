@@ -42,7 +42,7 @@ public class HoodContants {
     public static final double kPeakCurrentLimit = 40; // amps
     public static final double kPeakCurrentDuration = 10; // milliseconds
     public static final double kNominalVoltage = 11;
-    public static final double kOffset = Units.feetToMeters(0);
+    public static final double kOffset = Units.feetToMeters(1);
 
     public static final double[][] kHoodMap1 = {
         {Units.feetToMeters(2) + GlobalConstants.kCenterOffsetMeters - kOffset, 15},

@@ -5,6 +5,7 @@
 package team3647.frc2022.constants;
 
 import com.ctre.phoenix.motorcontrol.InvertType;
+import com.ctre.phoenix.motorcontrol.StatorCurrentLimitConfiguration;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -92,6 +93,11 @@ public class WristIntakeConstants {
         kDeployMotor.configAllSettings(kDeployMotorConfig, GlobalConstants.kTimeoutMS);
         kIntakeMotor.setInverted(kIntakeMotorInverted);
         kDeployMotor.setInverted(kDeployMotorInverted);
+
+        kDeployMotor.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, 30, 45, 0.5));
+        kIntakeMotor.configStatorCurrentLimit(
+                new StatorCurrentLimitConfiguration(true, 25, 35, 0.5));
 
         kIntakeMotor.enableVoltageCompensation(true);
         kDeployMotor.enableVoltageCompensation(true);

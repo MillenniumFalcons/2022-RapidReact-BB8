@@ -61,17 +61,17 @@ public class AutoCommands {
                 CommandGroupBase.sequence(
                         new WaitCommand(3.3),
                         getPartCommand("six ball bump 1"),
-                        new WaitCommand(1.7),
+                        new WaitCommand(2.7),
                         getPartCommand("six ball bump 2"),
                         new WaitCommand(2),
                         getPartCommand("six ball bump 3"));
         Command intakeSequence =
                 CommandGroupBase.sequence(
                         superstructure.retractIntake().withTimeout(0.6),
-                        superstructure.intakeCommands.openLoopAndStop(0.4).withTimeout(2.5),
+                        superstructure.intakeCommands.openLoopAndStop(0.4).withTimeout(2.2),
                         new WaitCommand(
-                                PathPlannerTrajectories.sixBallBump1.getTotalTimeSeconds() - 0.8),
-                        superstructure.deployAndRunIntake(() -> 6).withTimeout(1.7),
+                                PathPlannerTrajectories.sixBallBump1.getTotalTimeSeconds() - 1.0),
+                        superstructure.deployAndRunIntake(() -> 6).withTimeout(2.7),
                         superstructure.retractIntake(),
                         new WaitCommand(
                                 PathPlannerTrajectories.sixBallBump2.getTotalTimeSeconds() - 0.8),
@@ -87,8 +87,8 @@ public class AutoCommands {
                         superstructure.fastAutoAccelerateAndShoot().withTimeout(2.4),
                         new WaitCommand(
                                 PathPlannerTrajectories.sixBallBump1.getTotalTimeSeconds() - 1),
-                        superstructure.feederWithSensor(() -> 4).withTimeout(1.2),
-                        superstructure.fastAutoAccelerateAndShoot().withTimeout(1.7),
+                        superstructure.feederWithSensor(() -> 4).withTimeout(0.2),
+                        superstructure.fastAutoAccelerateAndShoot().withTimeout(2.7),
                         new WaitCommand(
                                 PathPlannerTrajectories.sixBallBump2.getTotalTimeSeconds() - 1),
                         superstructure.feederWithSensor(() -> 4).withTimeout(2.8),

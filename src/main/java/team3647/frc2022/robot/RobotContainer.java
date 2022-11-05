@@ -80,12 +80,12 @@ public class RobotContainer {
         // rot 2d is the rotation of the robot relative to field during auto
         // m_swerve.setOdometry(startPosition, startPosition.getRotation());
 
-        m_swerve.setOdometry(
-                PathPlannerTrajectories.startStateStraight,
-                new Rotation2d(Units.degreesToRadians(-45)));
         // m_swerve.setOdometry(
-        //         PathPlannerTrajectories.startStateSixBallBump1,
-        //         new Rotation2d(Units.degreesToRadians(45)));
+        //         PathPlannerTrajectories.startStateStraight,
+        //         new Rotation2d(Units.degreesToRadians(-45)));
+        m_swerve.setOdometry(
+                PathPlannerTrajectories.startStateSixBallBump1,
+                new Rotation2d(Units.degreesToRadians(45)));
     }
 
     private void configureButtonBindings() {
@@ -106,11 +106,11 @@ public class RobotContainer {
         // co controller
         coController.leftTrigger.whileActiveOnce(
                 m_superstructure
-                        .deployAndRunIntake(() -> 8.5)
+                        .deployAndRunIntake(() -> 9)
                         .alongWith(
                                 m_superstructure.feederWithSensor(
                                         () -> ColumnConstants.kFastIntakeVelocity)));
-
+        coController.rightBumper.whileActiveOnce(m_superstructure.aimTurret());
         coController.leftTrigger.whenInactive(m_superstructure.retractIntake());
 
         mainController
@@ -201,7 +201,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return autoCommands.getStraight();
+        return autoCommands.getSixBall();
     }
 
     public double getSwerveAngle() {

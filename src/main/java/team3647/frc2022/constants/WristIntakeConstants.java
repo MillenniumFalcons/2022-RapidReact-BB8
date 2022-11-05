@@ -97,7 +97,7 @@ public class WristIntakeConstants {
         kDeployMotor.configStatorCurrentLimit(
                 new StatorCurrentLimitConfiguration(true, 55, 60, 0.5));
         kIntakeMotor.configStatorCurrentLimit(
-                new StatorCurrentLimitConfiguration(true, 25, 35, 0.5));
+                new StatorCurrentLimitConfiguration(true, 35, 45, 0.5));
 
         kIntakeMotor.enableVoltageCompensation(true);
         kDeployMotor.enableVoltageCompensation(true);

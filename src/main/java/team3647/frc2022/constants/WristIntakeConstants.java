@@ -95,7 +95,7 @@ public class WristIntakeConstants {
         kDeployMotor.setInverted(kDeployMotorInverted);
 
         kDeployMotor.configStatorCurrentLimit(
-                new StatorCurrentLimitConfiguration(true, 30, 45, 0.5));
+                new StatorCurrentLimitConfiguration(true, 55, 60, 0.5));
         kIntakeMotor.configStatorCurrentLimit(
                 new StatorCurrentLimitConfiguration(true, 25, 35, 0.5));
 

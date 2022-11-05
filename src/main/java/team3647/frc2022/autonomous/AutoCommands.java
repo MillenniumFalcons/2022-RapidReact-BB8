@@ -59,7 +59,7 @@ public class AutoCommands {
                         .andThen(new WaitCommand(0.2), superstructure.aimTurret());
         Command drivetrainSequence =
                 CommandGroupBase.sequence(
-                        new WaitCommand(3.1),
+                        new WaitCommand(3.3),
                         getPartCommand("six ball bump 1"),
                         new WaitCommand(1.7),
                         getPartCommand("six ball bump 2"),
@@ -83,7 +83,7 @@ public class AutoCommands {
                         superstructure.retractIntake());
         Command shooterFeederSequence =
                 CommandGroupBase.sequence(
-                        new WaitCommand(0.7),
+                        new WaitCommand(0.9),
                         superstructure.fastAutoAccelerateAndShoot().withTimeout(2.4),
                         new WaitCommand(
                                 PathPlannerTrajectories.sixBallBump1.getTotalTimeSeconds() - 1),

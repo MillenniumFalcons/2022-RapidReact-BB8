@@ -34,7 +34,7 @@ public class PathPlannerTrajectories {
 
     public static final PathPlannerTrajectory sixBallBump3 =
             PathPlanner.loadPath(
-                    "6 ball bump 2",
+                    "6 ball bump 3",
                     AutoConstants.kMaxSpeedMetersPerSecond,
                     AutoConstants.kMaxAccelerationMetersPerSecSq);
     public static final Pose2d startStateSixBallBump3 = sixBallBump3.getInitialPose();

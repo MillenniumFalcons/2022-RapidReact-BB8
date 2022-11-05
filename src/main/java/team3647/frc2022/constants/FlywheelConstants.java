@@ -38,7 +38,7 @@ public final class FlywheelConstants {
 
     public static final double kLowGoalVelocity = 3;
     public static final double kBatterVelocity = 15;
-    private static final double kOffset = 0.75;
+    private static final double kOffset = 0.45;
     private static final double kFarOffset = -0.4;
 
     public static final double[][] kFlywheelMap2 = {

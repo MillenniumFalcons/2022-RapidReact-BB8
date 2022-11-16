@@ -18,6 +18,10 @@ public class WristCommands {
         return new InstantCommand(wrist::extend);
     }
 
+    public Command deployLow() {
+        return new InstantCommand(wrist::extendLower);
+    }
+
     public Command retract() {
         return new InstantCommand(wrist::retract);
     }

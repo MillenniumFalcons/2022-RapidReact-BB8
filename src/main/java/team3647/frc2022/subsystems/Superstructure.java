@@ -138,6 +138,10 @@ public class Superstructure {
         return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(surfaceVelocity));
     }
 
+    public Command deployAndRunIntakeLow(DoubleSupplier surfaceVelocity) {
+        return wristCommands.deployLow().andThen(intakeCommands.runClosedLoop(surfaceVelocity));
+    }
+
     public Command deployAndRunIntake() {
         return wristCommands.deploy().andThen(intakeCommands.runClosedLoop(() -> intakeOutput));
     }

@@ -61,9 +61,9 @@ public class AutoCommands {
                 CommandGroupBase.sequence(
                         new WaitCommand(3.3),
                         getPartCommand("six ball bump 1"),
-                        new WaitCommand(2.7),
+                        new WaitCommand(1.5),
                         getPartCommand("six ball bump 2"),
-                        new WaitCommand(2),
+                        new WaitCommand(1.3),
                         getPartCommand("six ball bump 3"));
         Command intakeSequence =
                 CommandGroupBase.sequence(
@@ -86,12 +86,12 @@ public class AutoCommands {
                         new WaitCommand(0.9),
                         superstructure.fastAutoAccelerateAndShoot().withTimeout(2.4),
                         new WaitCommand(
-                                PathPlannerTrajectories.sixBallBump1.getTotalTimeSeconds() - 1),
-                        superstructure.feederWithSensor(() -> 4).withTimeout(0.2),
-                        superstructure.fastAutoAccelerateAndShoot().withTimeout(2.7),
+                                PathPlannerTrajectories.sixBallBump1.getTotalTimeSeconds() - 1.5),
+                        superstructure.feederWithSensor(() -> 4).withTimeout(1.5),
+                        superstructure.fastAutoAccelerateAndShoot().withTimeout(1.5),
                         new WaitCommand(
-                                PathPlannerTrajectories.sixBallBump2.getTotalTimeSeconds() - 1),
-                        superstructure.feederWithSensor(() -> 4).withTimeout(2.8),
+                                PathPlannerTrajectories.sixBallBump2.getTotalTimeSeconds() - 1.3),
+                        superstructure.feederWithSensor(() -> 4).withTimeout(3.0),
                         new WaitCommand(PathPlannerTrajectories.sixBallBump3.getTotalTimeSeconds()),
                         superstructure.fastAutoAccelerateAndShoot());
         return CommandGroupBase.parallel(

@@ -47,6 +47,10 @@ public class Wrist extends TalonFXSubsystem {
         setAngleMotionMagic(intakableDeg);
     }
 
+    public void extendLower() {
+        setAngleMotionMagic(intakableDeg + 3);
+    }
+
     public void setAngleMotionMagic(double angle) {
         double multiplier = Math.signum(angle - getAngle());
         // double gravityVoltage = Math.cos(Math.toRadians(angle - minPosDeg)) * kCos;

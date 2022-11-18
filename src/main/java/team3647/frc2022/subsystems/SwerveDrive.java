@@ -202,7 +202,7 @@ public class SwerveDrive implements PeriodicSubsystem {
 
     @Override
     public void periodic() {
-        // read called in robot.java
+        // readPeriodicInputs();
         writePeriodicOutputs();
     }
 

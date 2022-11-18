@@ -24,18 +24,19 @@ public class AutoCommands {
         this.driveKinematics = driveKinematics;
     }
 
-    public Command getStraight() {
+    // intake and shooter feeder both require feeder
+    public Command getStraightCommand() {
         Command turretSequence =
-                new WaitCommand(0.7)
+                new WaitCommand(0.5)
                         .andThen(superstructure.turretCommands.motionMagic(0))
                         .andThen(new WaitCommand(0.2), superstructure.aimTurret());
         Command drivetrainSequence =
-                CommandGroupBase.sequence(new WaitCommand(3), getPartCommand("straight"));
+                CommandGroupBase.sequence(new WaitCommand(1.8), getPartCommand("straight"));
         Command intakeSequence =
                 CommandGroupBase.sequence(
-                        superstructure.retractIntake().withTimeout(0.6),
+                        superstructure.retractIntake().withTimeout(0.8),
                         new WaitCommand(
-                                2.4
+                                1.0
                                         + PathPlannerTrajectories.straightPath.getTotalTimeSeconds()
                                         - 0.8),
                         superstructure.deployAndRunIntake(() -> 6).withTimeout(3),

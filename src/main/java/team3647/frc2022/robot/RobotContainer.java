@@ -7,6 +7,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import java.util.LinkedList;
 import java.util.List;
 import team3647.frc2022.autonomous.AutoCommands;
@@ -43,19 +44,6 @@ import team3647.lib.vision.MultiTargetTracker;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    public enum Auto {
-        STRAIGHT_THREE(0),
-        SIX_BALL(1);
-        int index;
-
-        Auto(int index) {
-            this.index = index;
-        }
-    }
-
-    // CHANGE AUTO HERE
-    public Auto currentAuto = Auto.STRAIGHT_THREE;
-
     private final Joysticks mainController = new Joysticks(0);
     private final Joysticks coController = new Joysticks(1);
 
@@ -125,21 +113,23 @@ public class RobotContainer {
         mainController
                 .rightTrigger
                 .whileActiveOnce(m_superstructure.aimTurret())
-                .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot())
-                .whileActiveOnce(m_superstructure.intakeCommands.openLoopAndStop(0.3));
-        // mainController
-        //         .buttonB
-        //         .whileActiveOnce(
-        //                 new InstantCommand(
-        //                         () -> m_flywheel.setSurfaceSpeed(this.getShooterDashboard()),
-        //                         m_flywheel))
-        //         .whileActiveOnce(
-        //                 new InstantCommand(
-        //                         () -> m_hood.setAngleMotionMagic(this.getHoodDashboard()),
-        // m_hood))
-        //         .whileActiveOnce(
-        //                 m_superstructure.columnCommands.getGoVariableVelocity(
-        //                         () -> ColumnConstants.kSlowIntakeVelocity));
+                .whileActiveOnce(m_superstructure.fastAutoAccelerateAndShoot());
+        mainController
+                .buttonB
+                .whileActiveOnce(
+                        new InstantCommand(
+                                () -> m_flywheel.setSurfaceSpeed(this.getShooterDashboard()),
+                                m_flywheel))
+                .whileActiveOnce(
+                        new InstantCommand(
+                                () -> m_hood.setAngleMotionMagic(this.getHoodDashboard()), m_hood))
+                .whileActiveOnce(m_superstructure.columnCommands.getRunInwards());
+        mainController.buttonX.whileActiveOnce(
+                new InstantCommand(
+                        () ->
+                                m_flywheel.setOpenloop(
+                                        this.getShooterDashboard()
+                                                / FlywheelConstants.kNominalVoltage)));
     }
 
     private void configureDefaultCommands() {
@@ -182,18 +172,8 @@ public class RobotContainer {
         SmartDashboard.putNumber("Swerve Angle", 0.0);
         m_printer.addDouble("Raw Rotation", () -> m_swerve.getRawHeading());
         m_printer.addDouble("Turret go To", () -> m_superstructure.getAimedTurretSetpoint());
-        m_printer.addDouble("Hood go To", () -> m_superstructure.getAimedHoodAngle());
         m_printer.addPose("Robot", m_swerve::getPose);
         m_printer.addDouble("Aimed Velkocity", () -> m_superstructure.getAimedFlywheelSurfaceVel());
-        m_printer.addPose(
-                "Vision Pose",
-                () -> {
-                    var aimingParams = m_superstructure.getAimingParameters();
-                    if (aimingParams == null) {
-                        return new Pose2d();
-                    }
-                    return aimingParams.getFieldToGoal();
-                });
         SmartDashboard.putNumber("Hood Angle", 16.0);
         SmartDashboard.putNumber("Shooter Velocity", 5.0);
         m_printer.addDouble("intake velocity brr", () -> m_intake.getVelocity());
@@ -337,23 +317,4 @@ public class RobotContainer {
 
     private final AutoCommands autoCommands =
             new AutoCommands(m_swerve, SwerveDriveConstants.kDriveKinematics, m_superstructure);
-    private Pose2d startPosition = PathPlannerTrajectories.startStateStraight;
-    private Command autoCommand = autoCommands.getStraight();
-
-    public void chooseAuto() {
-        switch (currentAuto) {
-            case STRAIGHT_THREE:
-                startPosition = PathPlannerTrajectories.startStateStraight;
-                autoCommand = autoCommands.getStraight();
-                break;
-                //     case SIX_BALL:
-                //         startPosition = AutoConstants.positionOnTarmacParallel;
-                //         autoCommand = autoCommands.mikeJordanSixBall();
-                //         break;
-            default:
-                startPosition = PathPlannerTrajectories.startStateStraight;
-                autoCommand = autoCommands.getStraight();
-                break;
-        }
-    }
 }

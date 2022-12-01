@@ -19,7 +19,7 @@ public class AutoConstants {
     public static final double kYControllerI = 0; // 6;
     public static final double kYControllerD = 0; // 0;
 
-    public static final double xRotControllerP = 10; // 12;
+    public static final double xRotControllerP = 11; // 12;
     public static final double xRotControllerI = 4; // 8;
     public static final double xRotControllerD = 0;
 
